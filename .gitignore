@@ -1,3 +1,4 @@
 venv/**
 token
 bot.json
+__pycache__**
