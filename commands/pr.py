@@ -10,7 +10,7 @@ class PrCommand(BaseCommand):
         super().__init__(filename=__file__)
 
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        text_to_send = f"*Entrer vos PRs [via ce formulaire]({self.BOT_PROPERTIES['GOOGLE_FORM_PR']})*"
+        text_to_send = f"*Entrer vos PRs [via ce formulaire]({self.BOT_PROPERTIES['GOOGLE_FORM_PR_VIEW']})*"
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=text_to_send,
