@@ -30,6 +30,17 @@ async def pr(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     logging.info("/pr has been triggered")
 
+async def classement(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text_to_send = (
+        f"*[Voir le classement de l'équipage]({BOT_PROPERTIES['GOOGLE_SHEET_CLASSEMENT']})*"
+    )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=text_to_send,
+        parse_mode=ParseMode.MARKDOWN_V2,
+    )
+    logging.info("/classement has been triggered")
+
 
 if __name__ == "__main__":
     with open("token") as token_fp:
@@ -37,7 +48,9 @@ if __name__ == "__main__":
         application = ApplicationBuilder().token(TOKEN_BOT).build()
         start_handler = CommandHandler("start", start)
         pr_handler = CommandHandler("pr", pr)
+        classement_handler = CommandHandler("classement", classement)
         application.add_handler(start_handler)
         application.add_handler(pr_handler)
+        application.add_handler(classement_handler)
 
         application.run_polling()
