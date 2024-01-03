@@ -6,8 +6,8 @@ from .base import BaseCommand
 
 
 class ClassementCommand(BaseCommand):
-    def __init__(self) -> None:
-        super().__init__(filename=__file__)
+    def __init__(self, botconfig: dict) -> None:
+        super().__init__(botconfig, filename=__file__)
 
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         text_to_send = f"*[Voir le classement de l'équipage]({self.BOT_PROPERTIES['GOOGLE_SHEET_CLASSEMENT']})*"

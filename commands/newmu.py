@@ -5,9 +5,10 @@ from telegram.constants import ParseMode
 from .base import BaseCommand
 from services import NewPrService
 
+
 class NewMuCommand(BaseCommand):
-    def __init__(self) -> None:
-        super().__init__(filename=__file__)
+    def __init__(self, botconfig: dict) -> None:
+        super().__init__(botconfig, filename=__file__)
 
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.info(f"test: {context.args} | {update.message.text}")
