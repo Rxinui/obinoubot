@@ -2,3 +2,4 @@ python-telegram-bot
 python-telegram-bot[job-queue]
 requests
 httpx
+pytz

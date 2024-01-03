@@ -2,10 +2,11 @@ import logging
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from .base import BaseJob
+from utils import Singleton
 
-class AthleteLogReminderJob(BaseJob):
+class AthleteLogReminderJob(BaseJob,metaclass=Singleton):
 
-    __name__ = "atheleLogReminderJob"
+    __name__ = "AtheleLogReminderJob"
     
     async def __call__(self,context: ContextTypes.DEFAULT_TYPE):
         super().__call__(context)
