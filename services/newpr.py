@@ -31,8 +31,8 @@ class NewPrService:
         return entries
 
     @staticmethod
-    def submit_new_mu(mu: float):
-        data = NewPrService.__build_form_data("48405377","-80",mu=mu)
+    def submit_new_mu(user_id: str, category: str, mu: float):
+        data = NewPrService.__build_form_data(user_id, category, mu=mu)
         logging.debug(data)
         r = requests.post(URL_FORM, headers=NewPrService.headers, data=data)
         logging.info(r.status_code)
