@@ -12,8 +12,8 @@ class HelpCommand(BaseCommand):
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         text_to_send = (
             f"Les commandes disponibles sont :\n\n" \
-            f"\pr - Formulaire des PRs a remplir\n"
-            f"\classement - Feuille du classement\n"
+            f"/pr - Formulaire des PRs a remplir\n"
+            f"/classement - Feuille du classement\n"
         )
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
