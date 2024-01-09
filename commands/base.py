@@ -1,8 +1,11 @@
 import json
+import re
 from abc import ABCMeta, ABC, abstractmethod
+import logging
 from pathlib import Path
+from typing import Dict
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
 
 
@@ -15,16 +18,11 @@ class Singleton(type, metaclass=ABCMeta):
         return cls._instances[cls]
 
 
-class BaseCommand(metaclass=Singleton):
-    def __init__(
-        self, botconfig: dict, name: str = None, filename: str = None
-    ) -> None:
+class BaseCommand:
+    def __init__(self, botconfig: dict, name: str = None):
         super().__init__()
         self.__bot_properties = botconfig
-        if filename:
-            self._name = Path(filename).stem
-        if name:
-            self._name = name
+        self._name = name
 
     @property
     def BOT_PROPERTIES(self) -> dict:
@@ -43,5 +41,36 @@ class BaseCommand(metaclass=Singleton):
         return CommandHandler(self._name, self.execute)
 
     @abstractmethod
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
+    ):
         pass
+
+
+class BaseMessageCommand(BaseCommand):
+
+    MAP_MESSAGE_TYPE: Dict[str,ParseMode] = {
+        "MARKDOWN": ParseMode.MARKDOWN,
+        "HTML": ParseMode.HTML,
+    }
+
+    def __init__(self, botconfig: dict, name: str, message: str, message_type: str):
+        super().__init__(botconfig, name)
+        self._message = message
+        self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
+
+    def __parse_message(self):
+        # Check within message if ${}
+
+        # Replace ${} with actual values
+
+        # Return parsed message
+        pass
+
+    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=self._message,
+            parse_mode=self._message_type,
+        )
+        logging.info(f"{self.command_name} has been triggered")

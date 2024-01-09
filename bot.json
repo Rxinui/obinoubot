@@ -7,6 +7,15 @@
         "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
         "GOOGLE_SHEET_CLASSEMENT": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
     },
+    "commands": {
+        "pr": {
+            "instance_of": "BaseMessageCommand",
+            "args": {
+                "message": "*[Voir le classement de l'équipage](${properties.GOOGLE_SHEET_CLASSEMENT}) and also $properties.GOOGLE_SHEET_CLASSEMENT*",
+                "message_type": "MARKDOWN" 
+            }
+        }
+    },
     "scheduler": {
         "daily": [
             {
