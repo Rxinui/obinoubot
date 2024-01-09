@@ -17,4 +17,3 @@ class ClassementCommand(BaseCommand):
             parse_mode=ParseMode.MARKDOWN_V2,
         )
         logging.info(f"{self.command_name} has been triggered")
-        context.bot
