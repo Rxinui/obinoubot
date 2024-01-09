@@ -48,9 +48,9 @@ class BaseCommand:
 
 
 class BaseMessageCommand(BaseCommand):
-
-    MAP_MESSAGE_TYPE: Dict[str,ParseMode] = {
+    MAP_MESSAGE_TYPE: Dict[str, ParseMode] = {
         "MARKDOWN": ParseMode.MARKDOWN,
+        "MARKDOWN_V2": ParseMode.MARKDOWN_V2,
         "HTML": ParseMode.HTML,
     }
 
@@ -58,19 +58,51 @@ class BaseMessageCommand(BaseCommand):
         super().__init__(botconfig, name)
         self._message = message
         self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
+        self._parser = self.PropertiesParser(self.BOT_PROPERTIES)
 
-    def __parse_message(self):
-        # Check within message if ${}
-
-        # Replace ${} with actual values
-
-        # Return parsed message
-        pass
-
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
+    async def execute(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
+    ):
+        message = self._parser.parse(self._message)
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=self._message,
+            text=message,
             parse_mode=self._message_type,
         )
         logging.info(f"{self.command_name} has been triggered")
+
+    class PropertiesParser:
+
+        PROPERTIES_PATTERN = r"\${?([\.\w]+)}?"
+
+        def __init__(self, bot_properties: dict) -> None:
+            self.properties = bot_properties
+
+        def retrieve_property_from_variable(self, match_obj: re.Match) -> str:
+            """Callback to remove variable tokens '${}' to get property
+            and replace it by its value located in botconfig
+
+            Args:
+                match_obj (re.Match): property variable matched
+
+            Returns:
+                str: property's value
+            """
+            property = re.sub(r"[\$\{\}]", "", match_obj.group(0))
+            property_tokens = property.split(".")
+            property_tokens.remove("properties")
+            properties = self.properties
+            for key in property_tokens:
+                properties = properties[key]
+            return properties
+
+        def parse(self, message: str) -> str:
+            """Parse all properties variable into their value
+
+            Args:
+                message (str): message to parse
+
+            Returns:
+                str: parsed message
+            """
+            return re.sub(self.PROPERTIES_PATTERN, self.retrieve_property_from_variable, message)
