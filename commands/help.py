@@ -2,22 +2,24 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
-from .base import BaseCommand
+from .base import BaseMessageCommand
 
 
-class HelpCommand(BaseCommand):
-    def __init__(self, botconfig: dict) -> None:
-        super().__init__(botconfig, filename=__file__)
-
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        text_to_send = (
-            f"Les commandes disponibles sont :\n\n" \
-            f"/pr - Formulaire des PRs a remplir\n"
-            f"/classement - Feuille du classement\n"
+class HelpCommand(BaseMessageCommand):
+    def __init__(self, botconfig: dict):
+        super().__init__(
+            botconfig,
+            name="help",
+            message=self.__generate_help(botconfig),
+            message_type="MARKDOWN_V2",
         )
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=text_to_send,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-        logging.info(f"{self.command_name} has been triggered")
+
+    def __generate_deprecated(self, is_deprecated: bool) -> str:
+        return "\[Deprecated\]" if is_deprecated else ""
+
+    def __generate_help(self, botconfig: dict) -> str:
+        cmd_descriptions = []
+        for cmd_name, cmd_info in botconfig["commands"].items():
+            cmd_descriptions.append(f"/{cmd_name} \- {self.__generate_deprecated(cmd_info.get("deprecated"))} {cmd_info['description']}")
+        return f"Les commandes du bot:\n\n{"\n".join(cmd_descriptions)}"
+        

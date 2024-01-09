@@ -11,9 +11,26 @@
         "pr": {
             "instance_of": "BaseMessageCommand",
             "args": {
-                "message": "*[Voir le classement de l'équipage](${properties.GOOGLE_SHEET_CLASSEMENT}) and also $properties.GOOGLE_SHEET_CLASSEMENT*",
-                "message_type": "MARKDOWN" 
-            }
+                "message": "*Entrer vos PRs [via ce formulaire](${properties.GOOGLE_FORM_PR_VIEW})*",
+                "message_type": "MARKDOWN_V2"
+            },
+            "description": "Formulaire des PRs à remplir",
+            "deprecated": false
+        },
+        "classement": {
+            "instance_of": "BaseMessageCommand",
+            "args": {
+                "message": "*Voir le [classement de l'équipage](${properties.GOOGLE_SHEET_CLASSEMENT})*",
+                "message_type": "MARKDOWN_V2"
+            },
+            "description": "Feuille du classement des coachés",
+            "deprecated": true
+        },
+        "help": {
+            "instance_of": "HelpCommand",
+            "args": {},
+            "description": "Affiche les commandes du bot",
+            "deprecated": false
         }
     },
     "scheduler": {

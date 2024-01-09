@@ -2,3 +2,4 @@ venv/**
 token
 # bot.json
 __pycache__**
+debug.ipynb
