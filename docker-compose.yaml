@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  obinoubot:
+    container_name: obinoubot-1
+    image: rxinui/obinoubot
+    build:
+      context: .
+    command: [ "python", "./server.py" ]
+    develop:
+      watch:
+        - path: ./bot.json
+          action: sync+restart
+          target: /app/bot.json
+        - path: ./requirements.txt
+          action: rebuild
+    ports:
+      - "8080:80"

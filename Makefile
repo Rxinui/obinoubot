@@ -11,5 +11,9 @@ run-docker:
 	docker rm -f $(dockerContainer)
 	docker run --name $(dockerContainer) -e APP_ENV=dev $(dockerImage)
 
+dev-run:
+	docker-compose watch
+
 stop-docker:
 	docker kill $(dockerContainer)
+
