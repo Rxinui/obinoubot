@@ -3,3 +3,4 @@ python-telegram-bot[job-queue]
 requests
 httpx
 pytz
+python-dotenv

@@ -1,3 +1,13 @@
+# Obinoubot
+
+## Pre-requisites
+
+### `.env` file
+
+```ini
+APP_ENV={dev | prod}
+TOKEN_BOT={telegram bot token}
+```
 
 ## Google form
 

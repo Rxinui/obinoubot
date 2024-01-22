@@ -4,6 +4,7 @@ import pytz
 import telegram
 import os
 
+from dotenv import load_dotenv
 from commands import get_commands
 from utils import JobManager
 from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
@@ -19,12 +20,14 @@ with open("bot.json") as botconfig:
     BOT_CONFIG = json.load(botconfig)
 
 def load_token():
+    logging.info(f"APP_MODE is set on '{os.environ.get("APP_ENV")}'")
     if os.environ.get("APP_ENV") == "prod":
         return os.environ["TOKEN_BOT"]
     with open("token") as token_fp:
         return token_fp.read()
 
 def run():
+    load_dotenv()
     application = ApplicationBuilder().token(load_token()).build()
     bot : ExtBot = application.bot
     job_queue = application.job_queue

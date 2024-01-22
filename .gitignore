@@ -3,3 +3,4 @@ token
 # bot.json
 __pycache__**
 debug.ipynb
+.env
