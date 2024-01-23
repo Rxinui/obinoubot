@@ -11,7 +11,7 @@ class HelpCommand(BaseMessageCommand):
             botconfig,
             name="help",
             message=self.__generate_help(botconfig),
-            message_type="MARKDOWN",
+            message_type="MARKDOWN_V2",
         )
 
     def __generate_deprecated(self, is_deprecated: bool) -> str:
