@@ -1,10 +1,5 @@
-import json
 import logging
-from utils import Singleton
-from pathlib import Path
-from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
-from telegram.constants import ParseMode
+from telegram.ext import ContextTypes
 
 
 class BaseJob:
@@ -31,18 +26,3 @@ class BaseJob:
 
     def __call__(self, context: ContextTypes.DEFAULT_TYPE):
         logging.info(f"{self.__name__} job is fired.")
-
-
-class BaseMessageJob(BaseJob):
-    def __init__(
-        self, botconfig: dict, chat_id: str, message: str, name: str = None
-    ) -> None:
-        super().__init__(botconfig, name)
-        self.__chat_id = chat_id
-        self.__message = message
-
-    async def __call__(self, context: ContextTypes.DEFAULT_TYPE):
-        super().__call__(context)
-        await context.bot.send_message(
-            chat_id=self.__chat_id, text=self.__message, parse_mode=ParseMode.MARKDOWN
-        )

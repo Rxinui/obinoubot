@@ -1,12 +1,13 @@
 import json
 import re
-from abc import ABCMeta, ABC, abstractmethod
 import logging
+from abc import ABCMeta, ABC, abstractmethod
 from pathlib import Path
 from typing import Dict
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
+from utils import PropertyParser
 
 class BaseCommand:
     def __init__(self, botconfig: dict, name: str = None):
@@ -48,7 +49,8 @@ class BaseMessageCommand(BaseCommand):
         super().__init__(botconfig, name)
         self._message = message
         self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
-        self._parser = self.PropertiesParser(self.BOT_PROPERTIES)
+        self._parser = PropertyParser(botconfig)
+
 
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
@@ -61,38 +63,4 @@ class BaseMessageCommand(BaseCommand):
         )
         logging.info(f"{self.command_name} has been triggered")
 
-    class PropertiesParser:
-
-        PROPERTIES_PATTERN = r"\${?([\.\w]+)}?"
-
-        def __init__(self, bot_properties: dict) -> None:
-            self.properties = bot_properties
-
-        def retrieve_property_from_variable(self, match_obj: re.Match) -> str:
-            """Callback to remove variable tokens '${}' to get property
-            and replace it by its value located in botconfig
-
-            Args:
-                match_obj (re.Match): property variable matched
-
-            Returns:
-                str: property's value
-            """
-            property = re.sub(r"[\$\{\}]", "", match_obj.group(0))
-            property_tokens = property.split(".")
-            property_tokens.remove("properties")
-            properties = self.properties
-            for key in property_tokens:
-                properties = properties[key]
-            return properties
-
-        def parse(self, message: str) -> str:
-            """Parse all properties variable into their value
-
-            Args:
-                message (str): message to parse
-
-            Returns:
-                str: parsed message
-            """
-            return re.sub(self.PROPERTIES_PATTERN, self.retrieve_property_from_variable, message)
+    

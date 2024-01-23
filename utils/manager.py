@@ -28,7 +28,7 @@ class JobManager:
         """
         for job_config in botconfig["scheduler"]["daily"]:
             job_class = get_job_by_name(job_config["job"])
-            job = job_class.__init__(**job_config["args"])
+            job = job_class(botconfig,**job_config["args"])
             t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
             job_queue.run_daily(job, time=t, days=job_config["days"])
 
@@ -42,6 +42,6 @@ class JobManager:
         """
         for job_config in botconfig["scheduler"]["monthly"]:
             job_class = get_job_by_name(job_config["job"])
-            job = job_class.__init__(**job_config["args"])
+            job = job_class(botconfig, **job_config["args"])
             t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
             job_queue.run_monthly(job, when=t, day=job_config["day"])

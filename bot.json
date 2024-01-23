@@ -38,22 +38,23 @@
         "daily": [
             {
                 "time": [12, 30, 0],
-                "days": [2, 4],
-                "job": "BaseMessageJob",
+                "days": [5],
+                "job": "MessageJob",
                 "args": {
                     "chat_id": "${chats.Road_to_valhalla}",
                     "message": "Dernier rappel pour remplir vos RIRs sur votre programmation, avant dimanche."
                 }
             },
             {
-                "time": [12, 30, 0],
+                "time": [17, 15, 0],
                 "days": [2, 4],
-                "job": "BaseMessageJob",
+                "job": "MessageJob",
                 "args": {
                     "chat_id": "${chats.Road_to_valhalla}",
                     "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
                 }
             }
-        ]
+        ],
+        "monthly": []
     }
 }
