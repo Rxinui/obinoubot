@@ -3,44 +3,45 @@ from datetime import time
 from telegram.ext import JobQueue
 import pytz
 
-class JobManager:
-    
 
+class JobManager:
     DEFAULT_TIMEZONE = pytz.timezone("Europe/Paris")
 
     @staticmethod
-    def configure_jobs_scheduler(job_queue: JobQueue, scheduler: dict):
+    def configure_jobs_scheduler(job_queue: JobQueue, botconfig: dict):
         """_summary_
 
         Args:
             job_queue (JobQueue): _description_
-            scheduler (dict): _description_
+            botconfig (dict): _description_
         """
-        for job_config in scheduler["daily"]:
-            JobManager.configure_daily_job(job_queue, job_config)
-        for job_config in scheduler["monthly"]:
-            JobManager.configure_monthly_job(job_queue, job_config)
+        JobManager.configure_daily_job(job_queue, botconfig)
+        JobManager.configure_monthly_job(job_queue, botconfig)
 
     @staticmethod
-    def configure_daily_job(job_queue: JobQueue, job_config: dict) -> None:
+    def configure_daily_job(job_queue: JobQueue, botconfig: dict) -> None:
         """Configure job queue to setup job to run and how
 
         Args:
             job_queue (JobQueue): queue
             job (BaseJob): job to execute
         """
-        job = get_job_by_name(job_config["job"])
-        t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
-        job_queue.run_daily(job, time=t, days=job_config["days"])
+        for job_config in botconfig["scheduler"]["daily"]:
+            job_class = get_job_by_name(job_config["job"])
+            job = job_class.__init__(**job_config["args"])
+            t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
+            job_queue.run_daily(job, time=t, days=job_config["days"])
 
     @staticmethod
-    def configure_monthly_job(job_queue: JobQueue, job_config: dict) -> None:
+    def configure_monthly_job(job_queue: JobQueue, botconfig: dict) -> None:
         """Configure job queue to setup job to run and how
 
         Args:
             job_queue (JobQueue): queue
             job (BaseJob): job to execute
         """
-        job = get_job_by_name(job_config["job"])
-        t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
-        job_queue.run_monthly(job, when=t, day=job_config["day"])
+        for job_config in botconfig["scheduler"]["monthly"]:
+            job_class = get_job_by_name(job_config["job"])
+            job = job_class.__init__(**job_config["args"])
+            t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
+            job_queue.run_monthly(job, when=t, day=job_config["day"])

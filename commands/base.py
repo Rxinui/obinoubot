@@ -8,16 +8,6 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
 
-
-class Singleton(type, metaclass=ABCMeta):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
 class BaseCommand:
     def __init__(self, botconfig: dict, name: str = None):
         super().__init__()

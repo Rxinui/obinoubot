@@ -31,7 +31,7 @@ def run():
     application = ApplicationBuilder().token(load_token()).build()
     bot : ExtBot = application.bot
     job_queue = application.job_queue
-    JobManager.configure_jobs_scheduler(job_queue, BOT_CONFIG["scheduler"])
+    JobManager.configure_jobs_scheduler(job_queue, BOT_CONFIG)
     for command in get_commands(BOT_CONFIG):
         application.add_handler(command.handler)
         logging.info(f"main: add handler {command.command_name}")
