@@ -29,7 +29,7 @@ class PropertyParser:
         logging.debug(f"Property retrieved: {property}")
         property_tokens = property.split(".")
         property_to_lookup = property_tokens.pop(0)
-        bot_property = self.botconfig.__getattribute__(property_to_lookup)
+        bot_property = self.botconfig.get(property_to_lookup)
         for key in property_tokens:
             bot_property = bot_property[key]
         logging.debug(f"Properties obtained: {bot_property}")

@@ -49,5 +49,7 @@ class BaseMessageCommand(BaseCommand):
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
+        message = self._parser.parse(self._message)
         service = BotReplyService(self._botconfig, update, context)
-        await service.send_message(self._parser.parse(self._message), self._message_type)
+        logging.info(f"{self.name} is sending message: {message}")
+        await service.send_message(message, self._message_type)

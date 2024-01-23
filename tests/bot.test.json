@@ -1,0 +1,63 @@
+{
+    "chats": {
+        "Test_Valhalla": "-1001959905789",
+        "Road_to_valhalla": "-4039679338"
+    },
+    "properties": {
+        "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
+        "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
+        "GOOGLE_SHEET_CLASSEMENT": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+    },
+    "commands": {
+        "test_one_properties": {
+            "instance_of": "BaseMessageCommand",
+            "args": {
+                "message": "*Entrer vos PRs [via ce formulaire](${properties.GOOGLE_FORM_PR_VIEW})*",
+                "message_type": "MARKDOWN_V2"
+            },
+            "description": "Formulaire des PRs à remplir",
+            "deprecated": false
+        },
+        "test_multiple_properties": {
+            "instance_of": "BaseMessageCommand",
+            "args": {
+                "message": "${properties.GOOGLE_SHEET_CLASSEMENT} et ${properties.GOOGLE_FORM_PR_POST}",
+                "message_type": "MARKDOWN_V2"
+            },
+            "description": "Feuille du classement des coachés",
+            "deprecated": false
+        },
+        "test_empty_properties": {
+            "instance_of": "HelpCommand",
+            "args": {
+                "message": "Pas de properties",
+                "message_type": "MARKDOWN_V2"
+            },
+            "description": "Affiche les commandes du bot",
+            "deprecated": false
+        }
+    },
+    "scheduler": {
+        "daily": [
+            {
+                "time": [12, 30, 0],
+                "days": [5],
+                "job": "MessageJob",
+                "args": {
+                    "chat_id": "${chats.Road_to_valhalla}",
+                    "message": "Dernier rappel pour remplir vos RIRs sur votre programmation, avant dimanche."
+                }
+            },
+            {
+                "time": [17, 15, 0],
+                "days": [2, 4],
+                "job": "MessageJob",
+                "args": {
+                    "chat_id": "${chats.Road_to_valhalla}",
+                    "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
+                }
+            }
+        ],
+        "monthly": []
+    }
+}

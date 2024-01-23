@@ -22,5 +22,5 @@ stop-docker:
 	docker kill $(dockerContainer)
 
 test:
-	echo $(tokenBot)
+	python -m pytest
 

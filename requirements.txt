@@ -5,3 +5,4 @@ httpx
 pytz
 python-dotenv
 dotwiz
+pytest
