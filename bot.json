@@ -41,8 +41,8 @@
                 "job": "AthleteLogReminderJob"
             },
             {
-                "time": [15, 36, 0],
-                "days": [3],
+                "time": [12, 30, 0],
+                "days": [2,4],
                 "job": "AthleteLogReminderJob"
             }
         ],
