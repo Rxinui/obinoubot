@@ -1,23 +1,17 @@
 import logging
-import json
 import pytz
-import telegram
 import os
 
+from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
 from dotenv import load_dotenv
 from commands import get_commands
-from utils import JobManager
-from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
-
+from utils import JobManager, BotConfig
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
 DEFAULT_TIMEZONE = pytz.timezone("Europe/Paris")
-
-with open("bot.json") as botconfig:
-    BOT_CONFIG = json.load(botconfig)
 
 def load_token():
     logging.info(f"APP_MODE is set on '{os.environ.get("APP_ENV")}'")
@@ -28,6 +22,7 @@ def load_token():
 
 def run():
     load_dotenv()
+    BOT_CONFIG = BotConfig("bot.json")
     application = ApplicationBuilder().token(load_token()).build()
     bot : ExtBot = application.bot
     job_queue = application.job_queue
@@ -35,8 +30,6 @@ def run():
     for command in get_commands(BOT_CONFIG):
         application.add_handler(command.handler)
         logging.info(f"main: add handler {command.command_name}")
-    # menu = MenuButton(telegram.MenuButtonDefault)
-    # bot.set_chat_menu_button(chat_id="-1001959905789",menu_button=menu)
     application.run_polling()
 
 if __name__ == "__main__":

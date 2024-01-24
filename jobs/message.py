@@ -1,19 +1,19 @@
-import logging
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
-
-from utils import Singleton
+from random import randint
 from utils.parser import PropertyParser
+from utils.botconfig import BotConfig
+from utils.meta import Singleton
 from .base import BaseJob
-
 
 class MessageJob(BaseJob, metaclass=Singleton):
     __name__ = "MessageJob"
 
     def __init__(
-        self, botconfig: dict, chat_id: str, message: str, name: str = None
+        self, botconfig: BotConfig, chat_id: str, message: str, name: str = None
     ) -> None:
         super().__init__(botconfig, name)
+        self.__name__ = self.__name__ + str(randint(1, 9999)) if not name else name
         self.__parser = PropertyParser(botconfig)
         self.__chat_id = self.__parser.parse(chat_id)
         self.__message = self.__parser.parse(message)

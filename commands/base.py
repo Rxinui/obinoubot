@@ -1,23 +1,17 @@
-import json
-import re
 import logging
-from abc import ABCMeta, ABC, abstractmethod
-from pathlib import Path
 from typing import Dict
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ContextTypes
+from telegram.ext import ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
-from utils import PropertyParser
+from services import BotReplyService
+from utils import PropertyParser, BotConfig
+
 
 class BaseCommand:
-    def __init__(self, botconfig: dict, name: str = None):
+    def __init__(self, botconfig: BotConfig, name: str = None):
         super().__init__()
-        self.__bot_properties = botconfig
+        self._botconfig = botconfig
         self._name = name
-
-    @property
-    def BOT_PROPERTIES(self) -> dict:
-        return self.__bot_properties["properties"]
 
     @property
     def name(self) -> str:
@@ -31,11 +25,10 @@ class BaseCommand:
     def handler(self) -> CommandHandler:
         return CommandHandler(self._name, self.execute)
 
-    @abstractmethod
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
-        pass
+        logging.info(f"{self.command_name} has been triggered")
 
 
 class BaseMessageCommand(BaseCommand):
@@ -45,22 +38,16 @@ class BaseMessageCommand(BaseCommand):
         "HTML": ParseMode.HTML,
     }
 
-    def __init__(self, botconfig: dict, name: str, message: str, message_type: str):
+    def __init__(
+        self, botconfig: BotConfig, name: str, message: str, message_type: str
+    ):
         super().__init__(botconfig, name)
         self._message = message
         self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
         self._parser = PropertyParser(botconfig)
 
-
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
-        message = self._parser.parse(self._message)
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=message,
-            parse_mode=self._message_type,
-        )
-        logging.info(f"{self.command_name} has been triggered")
-
-    
+        service = BotReplyService(self._botconfig, update, context)
+        await service.send_message(self._parser.parse(self._message), self._message_type)

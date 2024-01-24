@@ -1,20 +1,13 @@
 import logging
 from telegram.ext import ContextTypes
+from utils.botconfig import BotConfig 
 
 
 class BaseJob:
-    def __init__(self, botconfig: dict, name: str = None) -> None:
-        self.__botconfig = botconfig
-        self._chats = self.__botconfig["chats"]
+    def __init__(self, botconfig: BotConfig, name: str = None) -> None:
+        self._botconfig = botconfig
+        self._chats = self._botconfig.chats
         self._name = name
-
-    @property
-    def BOT_SCHEDULER(self) -> dict:
-        return self.__botconfig["scheduler"]
-
-    @property
-    def BOT_PROPERTIES(self) -> dict:
-        return self.__bot_properties["properties"]
 
     @property
     def name(self) -> str:

@@ -25,7 +25,7 @@
                 "message_type": "MARKDOWN_V2"
             },
             "description": "Feuille du classement des coachés",
-            "deprecated": true
+            "deprecated": false
         },
         "help": {
             "instance_of": "HelpCommand",

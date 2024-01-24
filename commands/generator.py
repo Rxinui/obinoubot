@@ -4,12 +4,12 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from .base import BaseMessageCommand
-
+from utils import BotConfig
 
 class MessageCommandGenerator:
 
     @classmethod
-    def generate(cls, botconfig: dict) -> List[__name__]:
+    def generate(cls, botconfig: BotConfig) -> List[__name__]:
         """Fetch all commands that are instance of MessageCommandGenerator
 
         Args:
@@ -19,7 +19,7 @@ class MessageCommandGenerator:
             List[Dict[str, Any]]: commands message
         """
         commands = []
-        for cmd_name, cmd_info in botconfig["commands"].items():
+        for cmd_name, cmd_info in botconfig.commands.items():
             if cmd_info["instance_of"] == BaseMessageCommand.__name__:
                 instance = BaseMessageCommand(
                     botconfig,

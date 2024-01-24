@@ -4,3 +4,4 @@ requests
 httpx
 pytz
 python-dotenv
+dotwiz
