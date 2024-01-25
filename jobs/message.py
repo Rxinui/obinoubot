@@ -6,14 +6,15 @@ from utils.botconfig import BotConfig
 from utils.meta import Singleton
 from .base import BaseJob
 
-class MessageJob(BaseJob, metaclass=Singleton):
-    __name__ = "MessageJob"
+import uuid
+
+class MessageJob(BaseJob):
 
     def __init__(
         self, botconfig: BotConfig, chat_id: str, message: str, name: str = None
     ) -> None:
-        super().__init__(botconfig, name)
-        self.__name__ = self.__name__ + str(randint(1, 9999)) if not name else name
+        job_name = f"{self.__class__.__name__}-{str(uuid.uuid1())[:8]}" if not name else name
+        super().__init__(botconfig, job_name)
         self.__parser = PropertyParser(botconfig)
         self.__chat_id = self.__parser.parse(chat_id)
         self.__message = self.__parser.parse(message)

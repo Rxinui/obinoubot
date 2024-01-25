@@ -2,11 +2,11 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
-from .base import BaseMessageCommand
+from commands.base import BaseMessageCommand
 from utils.botconfig import BotConfig
 
 class HelpCommand(BaseMessageCommand):
-    def __init__(self, botconfig: BotConfig):
+    def __init__(self, botconfig: BotConfig, *args, **kwargs):
         super().__init__(
             botconfig,
             name="help",

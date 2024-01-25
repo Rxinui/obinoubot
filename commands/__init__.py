@@ -1,10 +1,7 @@
 from utils.botconfig import BotConfig
-from .newmu import NewMuCommand
 from .help import HelpCommand
-from .generator import MessageCommandGenerator
+from .base import BaseCommand, BaseMessageCommand
 
-
-def get_commands(botconfig: BotConfig) -> set:
-    commands = MessageCommandGenerator.generate(botconfig)
-    commands.append(HelpCommand(botconfig))
-    return commands
+def get_command_by_classname(command_classname: str) -> BaseCommand:
+    print("DEBUG:get_command_by_classname:", globals()[command_classname])
+    return globals().get(command_classname)

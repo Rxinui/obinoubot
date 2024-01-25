@@ -4,8 +4,7 @@ import os
 
 from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
 from dotenv import load_dotenv
-from commands import get_commands
-from utils import JobManager, BotConfig
+from utils import JobManager, BotConfig, CommandManager
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -25,11 +24,9 @@ def run():
     BOT_CONFIG = BotConfig("bot.json")
     application = ApplicationBuilder().token(load_token()).build()
     bot : ExtBot = application.bot
-    job_queue = application.job_queue
-    JobManager.configure_jobs_scheduler(job_queue, BOT_CONFIG)
-    for command in get_commands(BOT_CONFIG):
-        application.add_handler(command.handler)
-        logging.info(f"main: add handler {command.command_name}")
+    JobManager.configure_jobs_scheduler(application.job_queue, BOT_CONFIG)
+    commands = CommandManager.init_commands_from_botconfig(BOT_CONFIG)
+    CommandManager.add_commands(application,commands)
     application.run_polling()
 
 if __name__ == "__main__":

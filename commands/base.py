@@ -4,7 +4,8 @@ from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
 from services import BotReplyService
-from utils import PropertyParser, BotConfig
+from utils.parser import PropertyParser
+from utils.botconfig import BotConfig
 
 
 class BaseCommand:
