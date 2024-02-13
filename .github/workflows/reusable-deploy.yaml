@@ -1,0 +1,30 @@
+name: "[Reusable] Deploy on dokku"
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Reference to deploy
+        type: string
+        required: true
+      deploy-to:
+        description: Environment to deploy
+        type: string
+        required: true
+concurrency: prod
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: "${{ inputs.deploy-to }}"
+    steps:
+      - name: Deploy via ssh
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          username: ${{ secrets.SSH_USERNAME }}
+          host: ${{ secrets.SSH_HOST }}
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          script: |
+            cd ~/obinoubot
+            git fetch --all
+            git reset --hard
+            git pull -f --ff origin ${{ inputs.ref }}
+            git push -f dokku ${{ inputs.ref }}

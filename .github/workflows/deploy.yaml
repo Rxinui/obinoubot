@@ -1,0 +1,23 @@
+name: "Deploy on dokku"
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Ref to deploy
+        type: string
+        required: true
+      deploy-to:
+        description: Environment to deploy
+        type: choice
+        required: true
+        options:
+          - prod
+jobs:
+  deploy:
+    uses: ./.github/workflows/reusable-deploy.yaml
+    secrets: inherit
+    strategy:
+      matrix:
+        environments: ["${{ inputs.deploy-to }}"]
+    with:
+      ref: "${{ inputs.ref }}"
