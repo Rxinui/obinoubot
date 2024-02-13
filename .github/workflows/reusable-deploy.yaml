@@ -10,11 +10,17 @@ on:
         description: Environment to deploy
         type: string
         required: true
+      deploy-method:
+        description: Deployment method between "git" or "docker-image"
+        type: string
+        required: true
+        default: git
 concurrency: prod
 jobs:
-  deploy:
+  deploy-git:
     runs-on: ubuntu-latest
     environment: "${{ inputs.deploy-to }}"
+    if: inputs.deploy-method == 'git'
     steps:
       - name: Deploy via ssh
         uses: appleboy/ssh-action@v1.0.3
@@ -25,6 +31,25 @@ jobs:
           script: |
             cd ~/obinoubot
             git fetch --all
-            git reset --hard
             git pull -f --ff origin ${{ inputs.ref }}
             git push -f dokku ${{ inputs.ref }}
+  deploy-docker-image:
+    runs-on: ubuntu-latest
+    environment: "${{ inputs.deploy-to }}"
+    if: inputs.deploy-method == 'docker-image'
+    steps:
+      - name: Deploy via ssh
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 127.0.0.1
+          username: dokku
+          port: 3022
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          proxy_username: ${{ secrets.SSH_USERNAME }}
+          proxy_host: ${{ secrets.SSH_HOST }}
+          proxy_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          script: |
+            DOCKER_IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/obinoubot:${{ inputs.ref }}"
+            docker pull $DOCKER_IMAGE
+            # docker tag $DOCKER_IMAGE dokku/obinoubot:${{ inputs.ref }}
+            dokku git:from-image obinoubot $DOCKER_IMAGE

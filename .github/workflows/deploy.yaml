@@ -1,4 +1,4 @@
-name: "Deploy on dokku"
+name: "Deploy on dokku from git source"
 on:
   workflow_dispatch:
     inputs:
@@ -16,8 +16,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/reusable-deploy.yaml
     secrets: inherit
-    strategy:
-      matrix:
-        environments: ["${{ inputs.deploy-to }}"]
     with:
       ref: "${{ inputs.ref }}"
+      deploy-to: "${{ inputs.deploy-to }}"
+      deploy-method: git
