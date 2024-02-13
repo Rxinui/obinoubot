@@ -53,6 +53,15 @@
                     "chat_id": "${chats.Road_to_valhalla}",
                     "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
                 }
+            },
+            {
+                "time": [18, 0, 0],
+                "days": [1],
+                "job": "MessageJob",
+                "args": {
+                    "chat_id": "${chats.Road_to_valhalla}",
+                    "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/pr` afin de mettre a jour le classement."
+                }
             }
         ],
         "monthly": []
