@@ -1,6 +1,7 @@
 from utils.botconfig import BotConfig
 from .help import HelpCommand
 from .base import BaseCommand, BaseMessageCommand
+from .me import MeCommand
 
 def get_command_by_classname(command_classname: str) -> BaseCommand:
     print("DEBUG:get_command_by_classname:", globals()[command_classname])

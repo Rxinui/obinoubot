@@ -1,9 +1,11 @@
 import logging
 import pytz
 import os
+from telegram import Update
 
 from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
 from dotenv import load_dotenv
+from conversations.newpr import NewPrConversation
 from utils import JobManager, BotConfig, CommandManager
 
 logging.basicConfig(
@@ -27,7 +29,8 @@ def run():
     JobManager.configure_jobs_scheduler(application.job_queue, BOT_CONFIG)
     commands = CommandManager.init_commands_from_botconfig(BOT_CONFIG)
     CommandManager.add_commands(application,commands)
-    application.run_polling()
+    application.add_handler(NewPrConversation())
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
     run()

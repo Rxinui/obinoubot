@@ -40,12 +40,20 @@ class BaseMessageCommand(BaseCommand):
     }
 
     def __init__(
-        self, botconfig: BotConfig, name: str, message: str, message_type: str
+        self, botconfig: BotConfig, name: str, message: str = "", message_type: str = "MARKDOWN_V2"
     ):
         super().__init__(botconfig, name)
         self._message = message
         self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
         self._parser = PropertyParser(botconfig)
+
+    @property
+    def message(self) -> str:
+        return self._message
+
+    @message.setter
+    def message(self, message: str):
+        self._message = message
 
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
