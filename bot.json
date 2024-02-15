@@ -27,6 +27,12 @@
             "description": "Feuille du classement des coachés",
             "deprecated": false
         },
+        "me": {
+            "instance_of": "MeCommand",
+            "args": {},
+            "description": "Get information about me",
+            "deprecated": false
+        },
         "help": {
             "instance_of": "HelpCommand",
             "args": {},
