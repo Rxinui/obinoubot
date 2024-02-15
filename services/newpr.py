@@ -11,6 +11,8 @@ class NewPrService:
 
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
+    CATEGORIES = ["-66", "-73", "-80", "-87", "-94", "-104", ">104"]
+
     @staticmethod
     def __build_form_data(
         user_id: str,
@@ -31,8 +33,15 @@ class NewPrService:
         return entries
 
     @staticmethod
-    def submit_new_mu(user_id: str, category: str, mu: float):
-        data = NewPrService.__build_form_data(user_id, category, mu=mu)
+    def submit_new_pr(
+        user_id: str,
+        category: str,
+        mu: float = None,
+        pull: float = None,
+        dips: float = None,
+        squat: float = None,
+    ):
+        data = NewPrService.__build_form_data(user_id, category, mu, pull, dips, squat)
         logging.debug(data)
         r = requests.post(URL_FORM, headers=NewPrService.headers, data=data)
         logging.info(r.status_code)

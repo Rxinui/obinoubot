@@ -29,7 +29,7 @@ def run():
     JobManager.configure_jobs_scheduler(application.job_queue, BOT_CONFIG)
     commands = CommandManager.init_commands_from_botconfig(BOT_CONFIG)
     CommandManager.add_commands(application,commands)
-    application.add_handler(NewPrConversation())
+    application.add_handler(NewPrConversation(BOT_CONFIG))
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
