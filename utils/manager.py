@@ -1,5 +1,5 @@
-from commands import get_command_by_classname
 from commands.base import BaseCommand
+from commands import get_command_by_classname
 from jobs import get_job_by_name
 from utils.botconfig import BotConfig
 from datetime import time
