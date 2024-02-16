@@ -1,9 +1,5 @@
 import requests
-import json
 import logging
-
-with open("bot.json") as properties_fp:
-    URL_FORM = json.load(properties_fp)["properties"]["GOOGLE_FORM_PR_POST"]
 
 
 class NewPrService:
@@ -12,6 +8,9 @@ class NewPrService:
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
     CATEGORIES = ["-66", "-73", "-80", "-87", "-94", "-104", ">104"]
+
+    def __init__(self, url: str) -> None:
+        self.url = url
 
     @staticmethod
     def __build_form_data(
@@ -32,17 +31,17 @@ class NewPrService:
         }
         return entries
 
-    @staticmethod
     def submit_new_pr(
+        self,
         user_id: str,
         category: str,
         mu: float = None,
         pull: float = None,
         dips: float = None,
         squat: float = None,
-    ):
+    ) -> requests.Response:
         data = NewPrService.__build_form_data(user_id, category, mu, pull, dips, squat)
         logging.debug(data)
-        r = requests.post(URL_FORM, headers=NewPrService.headers, data=data)
+        r = requests.post(self.url, headers=self.headers, data=data)
         logging.info(r.status_code)
         return r
