@@ -9,15 +9,6 @@
     "GOOGLE_SHEET_CLASSEMENT": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
   },
   "commands": {
-    "pr": {
-      "instance_of": "BaseMessageCommand",
-      "args": {
-        "message": "*Entrer vos PRs [via ce formulaire](${properties.GOOGLE_FORM_PR_VIEW})*",
-        "message_type": "MARKDOWN_V2"
-      },
-      "description": "Formulaire des PRs à remplir",
-      "deprecated": false
-    },
     "newpr": {
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
@@ -66,7 +57,7 @@
         "job": "MessageJob",
         "args": {
           "chat_id": "${chats.Road_to_valhalla}",
-          "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/pr` afin de mettre a jour le classement."
+          "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/newpr` afin de mettre a jour le classement."
         }
       }
     ],
