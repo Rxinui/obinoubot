@@ -59,6 +59,15 @@
           "chat_id": "${chats.Road_to_valhalla}",
           "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/newpr` afin de mettre a jour le classement."
         }
+      },
+      {
+        "time": [17, 45, 0],
+        "days": [4],
+        "job": "MessageJob",
+        "args": {
+          "chat_id": "${chats.Road_to_valhalla}",
+          "message": "Saviez-vous que vous pouvez utiliser mon code `OBIN` pour obtenir **-10% de réduction sur l'ensemble du shop** https://tatakai.store - d'ailleurs l'édition StreetLifting club est disponible. :)"
+        }
       }
     ],
     "monthly": []
