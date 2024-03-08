@@ -12,7 +12,9 @@
     "newpr": {
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
-      "args": {},
+      "args": {
+        "notify_chats": ["${chats.Test_Valhalla}"]
+      },
       "deprecated": false
     },
     "classement": {
@@ -35,7 +37,7 @@
     "daily": [
       {
         "time": [12, 30, 0],
-        "days": [5],
+        "days": [6],
         "job": "MessageJob",
         "args": {
           "chat_id": "${chats.Road_to_valhalla}",

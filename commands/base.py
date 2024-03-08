@@ -40,7 +40,11 @@ class BaseMessageCommand(BaseCommand):
     }
 
     def __init__(
-        self, botconfig: BotConfig, name: str, message: str = "", message_type: str = "MARKDOWN_V2"
+        self,
+        botconfig: BotConfig,
+        name: str,
+        message: str = "",
+        message_type: str = "MARKDOWN_V2",
     ):
         super().__init__(botconfig, name)
         self._message = message
@@ -61,4 +65,4 @@ class BaseMessageCommand(BaseCommand):
         message = self._parser.parse(self._message)
         service = BotReplyService(self._botconfig, update, context)
         logging.info(f"{self.name} is sending message: {message}")
-        await service.send_message(message, self._message_type)
+        await service.send_reply(message, self._message_type)

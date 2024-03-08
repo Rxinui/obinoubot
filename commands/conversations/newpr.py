@@ -5,13 +5,14 @@ from telegram.constants import ParseMode
 import logging
 
 from commands.base import BaseCommand
+from services.message import BotNotifyService
+from services.newpr import NewPrService
 from utils.botconfig import BotConfig
 from utils.parser import PropertyParser
-from services import NewPrService
 
 class NewPrConversation(BaseCommand):
 
-  ENTER_CATEGORY, ENTER_PR, REGISTER_PR, SUBMIT = range(4)
+  ENTER_CATEGORY, ENTER_PR, REGISTER_PR, SUBMIT, NOTIFY_CHATS = range(5)
 
   MU = "MU"
   PULL = "Pull"
@@ -19,12 +20,13 @@ class NewPrConversation(BaseCommand):
   SQUAT = "Squat"
 
 
-  def __init__(self, botconfig: BotConfig, name: str, *args, **kwargs):
+  def __init__(self, botconfig: BotConfig, name: str, notify_chats: list[str|int] = [], *args, **kwargs):
     super().__init__(botconfig, name)
     self._parser = PropertyParser(botconfig)
     self._new_pr_service = NewPrService(self._botconfig["properties"]["GOOGLE_FORM_PR_POST"])
     self.reply_lift_keyboard = ReplyKeyboardMarkup([[self.MU,self.PULL,self.DIPS,self.SQUAT],["Cancel","Submit"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
     self.reply_category_keyboard = ReplyKeyboardMarkup([self._new_pr_service.CATEGORIES[:4],self._new_pr_service.CATEGORIES[4:],["Cancel"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
+    self._notify_chats = notify_chats
 
   @property
   def handler(self) -> ConversationHandler:
@@ -32,7 +34,7 @@ class NewPrConversation(BaseCommand):
     states = {
       self.ENTER_CATEGORY: [MessageHandler(filters.Regex(f'^({"|".join(self._new_pr_service.CATEGORIES)})$'),self.enter_category)],
       self.ENTER_PR: [MessageHandler(filters.Regex(f"^(MU|Pull|Dips|Squat)$"),self.enter_pr),MessageHandler(filters.Regex("^(Submit)$"),self.submit)],
-      self.REGISTER_PR: [MessageHandler(filters.Regex("^[0-9\.]+$"),self.register_pr)]
+      self.REGISTER_PR: [MessageHandler(filters.Regex("^[0-9\.]+$"),self.register_pr)],
     }
     fallbacks = [CommandHandler("cancel",self.cancel),MessageHandler(filters.Regex("^(Cancel)$"),self.cancel)]
     return ConversationHandler(entry_points, states, fallbacks)
@@ -102,11 +104,20 @@ class NewPrConversation(BaseCommand):
     if response.status_code == 400:
       text_to_send = f"*Erreur: contacter l'admin.*"
       logging.error(text_to_send)
+      logging.error(response.reason)
     await update.message.reply_text(
       self._parser.parse(text_to_send),reply_markup=ReplyKeyboardRemove()
     )
-    context.user_data.clear()
+    await self.notify_group(update, context)
     return ConversationHandler.END
+
+  async def notify_group(self,update: Update, context: ContextTypes.DEFAULT_TYPE):
+    service = BotNotifyService(self._botconfig,update,context)
+    prs = '\n'.join([ f'{lift.capitalize()}: {pr}' for lift, pr in context.user_data.items() if pr])
+    message = f"Be aware that @{update.effective_user.username} has new PRs folks !\n{prs}"
+    for chat_id in self._notify_chats:
+      await service.notify_chat(chat_id, message)
+    return context.user_data.clear()
   
   async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""
