@@ -3,6 +3,9 @@
     "Test_Valhalla": "-1001959905789",
     "Road_to_valhalla": "-4039679338"
   },
+  "roles": {
+    "admin": ["623710231"]
+  },
   "properties": {
     "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
     "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
@@ -31,6 +34,14 @@
       "args": {},
       "description": "Affiche les commandes du bot",
       "deprecated": false
+    },
+    "admin": {
+      "instance_of": "ObinoubotConversation",
+      "is_secret": true,
+      "description": "Notify chat on behalf of ObinouBot",
+      "args": {
+
+      }
     }
   },
   "scheduler": {
