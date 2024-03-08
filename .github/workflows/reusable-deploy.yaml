@@ -52,4 +52,5 @@ jobs:
             DOCKER_IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/obinoubot:${{ inputs.ref }}"
             docker pull $DOCKER_IMAGE
             # docker tag $DOCKER_IMAGE dokku/obinoubot:${{ inputs.ref }}
-            dokku git:from-image obinoubot $DOCKER_IMAGE
+            # dokku git:from-image obinoubot $DOCKER_IMAGE
+            dokku ps:rebuild obinoubot
