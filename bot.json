@@ -13,7 +13,7 @@
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
       "args": {
-        "notify_chats": ["${chats.Test_Valhalla}"]
+        "notify_chats": ["${chats.Road_to_valhalla}"]
       },
       "deprecated": false
     },
