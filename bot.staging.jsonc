@@ -1,0 +1,51 @@
+{
+  "chats": {
+    "onlysl-dev": "-1001959905789",
+    "onlysl-staging": "-1658023494"
+  },
+  "properties": {
+    "onlysl-dev": {
+      "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
+      "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
+      "GOOGLE_SHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+    },
+    "onlysl-staging": {
+      "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
+      "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
+      "GOOGLE_SHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040"
+    }
+  },
+  "conversations": {
+    // Conversations are command directly target to Bot
+    "newpr": {
+      "instance_of": "NewPrConversation",
+      "description": "Submit a new PR",
+      "args": {
+        "notify_chats": ["${chats.onlysl-dev}"] // deprecated:
+        // Instead, it will fetch user's id from the command
+        // and lookup for its group to fetch group_id
+        // if multiple groups found, compare it with chats.*
+        // and notify all chats where this user belong
+      },
+      "deprecated": false
+    }
+  },
+  "commands": {
+    // Commands are defined for a specific group
+    "ranking": {
+      "instance_of": "RankingCommand",
+      "args": {},
+      "description": "See athletes ranking",
+      "deprecated": false,
+      "allowed_for": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
+    },
+    "help": {
+      "instance_of": "HelpCommand",
+      "args": {},
+      "description": "Display Bot's commands",
+      "deprecated": false,
+      "allowed_for": ["${chats.onlysl-dev}"]
+    }
+  },
+  "scheduler": {}
+}
