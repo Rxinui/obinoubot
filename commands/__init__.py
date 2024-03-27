@@ -2,6 +2,7 @@ from utils.botconfig import BotConfig
 from .help import HelpCommand
 from .base import BaseCommand, BaseMessageCommand
 from .conversations.newpr import NewPrConversation
+from .ranking import RankingCommand
 
 
 def get_command_by_classname(command_classname: str) -> BaseCommand:

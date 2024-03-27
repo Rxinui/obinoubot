@@ -2,13 +2,15 @@ import re
 import logging
 
 from .botconfig import BotConfig
+
+
 class PropertyParser:
     """
     Pattern to retrieve property within bot.json
     A property is define in-between these marks '${}'
     """
 
-    PROPERTY_PATTERN = r"\${?([\.\w]+)}?"
+    PROPERTY_PATTERN = r"\${?([\.\-\w]+)}?"
 
     def __init__(self, botconfig: BotConfig) -> None:
         self.botconfig = botconfig
