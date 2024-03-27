@@ -1,7 +1,8 @@
 venv/**
-token
+token*
 # bot.json
 __pycache__**
 debug.ipynb
 .env
 hotdev.ipynb
+.vscode/**
