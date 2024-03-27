@@ -1,8 +1,9 @@
 import logging
-from typing import Dict
+from typing import Dict, Self
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
+from exceptions.errors import CommandNotAllowedError
 from services import BotReplyService
 from utils.parser import PropertyParser
 from utils.botconfig import BotConfig
@@ -13,6 +14,7 @@ class BaseCommand:
         super().__init__()
         self._botconfig = botconfig
         self._name = name
+        self._parser = PropertyParser(botconfig)
 
     @property
     def name(self) -> str:
@@ -26,10 +28,23 @@ class BaseCommand:
     def handler(self) -> CommandHandler:
         return CommandHandler(self._name, self.execute)
 
+    def _is_allowed_for_this_chat(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
+    ) -> Self:
+        allowed_for = [
+            int(self._parser.parse(chat))
+            for chat in self._botconfig.commands.get(self.name).allowed_for
+        ]
+        logging.info(f"{update.message.chat_id}, {allowed_for}")
+        if update.message.chat_id not in allowed_for:
+            raise CommandNotAllowedError(self.name, update.message.chat_id)
+        return self
+
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
         logging.info(f"{self.command_name} has been triggered")
+        self._is_allowed_for_this_chat(update, context)
 
 
 class BaseMessageCommand(BaseCommand):
@@ -49,7 +64,6 @@ class BaseMessageCommand(BaseCommand):
         super().__init__(botconfig, name)
         self._message = message
         self._message_type = self.MAP_MESSAGE_TYPE.get(message_type)
-        self._parser = PropertyParser(botconfig)
 
     @property
     def message(self) -> str:

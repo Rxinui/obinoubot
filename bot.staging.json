@@ -1,7 +1,7 @@
 {
   "chats": {
     "onlysl-dev": "-1001959905789",
-    "onlysl-staging": "-1658023494"
+    "onlysl-staging": "-1001658023494"
   },
   "properties": {
     "onlysl-dev": {
@@ -16,22 +16,16 @@
     }
   },
   "conversations": {
-    // Conversations are command directly target to Bot
     "newpr": {
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
       "args": {
-        "notify_chats": ["${chats.onlysl-dev}"] // deprecated:
-        // Instead, it will fetch user's id from the command
-        // and lookup for its group to fetch group_id
-        // if multiple groups found, compare it with chats.*
-        // and notify all chats where this user belong
+        "notify_chats": ["${chats.onlysl-dev}"]
       },
       "deprecated": false
     }
   },
   "commands": {
-    // Commands are defined for a specific group
     "ranking": {
       "instance_of": "RankingCommand",
       "args": {},
@@ -47,5 +41,8 @@
       "allowed_for": ["${chats.onlysl-dev}"]
     }
   },
-  "scheduler": {}
+  "scheduler": {
+    "daily": {},
+    "monthly": {}
+  }
 }

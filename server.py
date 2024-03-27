@@ -22,8 +22,8 @@ def load_token():
     
 def load_botconfig() -> BotConfig:
     if os.environ.get("APP_ENV") == "prod":
-        return BotConfig("bot.jsonc")
-    return BotConfig("bot.staging.jsonc")
+        return BotConfig("bot.json")
+    return BotConfig("bot.staging.json")
 
 def run():
     load_dotenv()
