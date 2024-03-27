@@ -8,3 +8,4 @@ class BotConfig(DotWiz):
         botconfig_file = Path(botconfig_file)
         with open(str(botconfig_file)) as fp:
             super().__init__(json.load(fp))
+            self.inverted_chats = {v: k for k, v in self.chats.items()}
