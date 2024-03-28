@@ -4,15 +4,15 @@
         "Road_to_valhalla": "-4039679338"
     },
     "properties": {
-        "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
-        "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
-        "GOOGLE_SHEET_CLASSEMENT": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+        "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
+        "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
+        "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
     },
     "commands": {
         "test_one_properties": {
             "instance_of": "BaseMessageCommand",
             "args": {
-                "message": "*Entrer vos PRs [via ce formulaire](${properties.GOOGLE_FORM_PR_VIEW})*",
+                "message": "*Entrer vos PRs [via ce formulaire](${properties.GFORM_PR_VIEW})*",
                 "message_type": "MARKDOWN_V2"
             },
             "description": "Formulaire des PRs à remplir",
@@ -21,7 +21,7 @@
         "test_multiple_properties": {
             "instance_of": "BaseMessageCommand",
             "args": {
-                "message": "${properties.GOOGLE_SHEET_CLASSEMENT} et ${properties.GOOGLE_FORM_PR_POST}",
+                "message": "${properties.GSHEET_RANKING} et ${properties.GFORM_PR_POST}",
                 "message_type": "MARKDOWN_V2"
             },
             "description": "Feuille du classement des coachés",
