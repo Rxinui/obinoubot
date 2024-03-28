@@ -1,8 +1,8 @@
 import logging
-from telegram import Update
+import telegram.error
+from telegram import ChatMember, Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
-
 from exceptions import UnauthorizedChatError
 from utils import botconfig
 from utils.parser import PropertyParser
@@ -30,12 +30,7 @@ class BotMessage:
         Returns:
             bool: True if the chat is authorized else False
         """
-        chat_id = str(chat_id)
-        check = [
-            chat_id == authorized_chat_id
-            for authorized_chat_id in self._botconfig.chats.values()
-        ]
-        return any(check)
+        return str(chat_id) in self._botconfig.chats.values()
 
 
 class BotReplyService(BotMessage):
@@ -60,9 +55,7 @@ class BotReplyService(BotMessage):
         """
         if not self._is_coming_from_authorized_chats(self._update.effective_chat.id):
             raise UnauthorizedChatError(self._update.effective_chat.id)
-        await self._context.bot.send_message(
-            self._update.effective_chat.id, text=message, parse_mode=message_type
-        )
+        await self._update.effective_message.reply_text(message, message_type)
 
 
 class BotNotifyService(BotMessage):
@@ -101,3 +94,20 @@ class BotNotifyService(BotMessage):
         await self._context.bot.send_message(
             _chat_id, text=message, parse_mode=message_type
         )
+
+    async def notify_authorized_chat_where_user_is_member(
+        self,
+        message,
+        message_type: ParseMode = ParseMode.MARKDOWN,
+    ):
+        for authorized_chat_id in self._botconfig.chats.values():
+            try:
+                member: ChatMember = await self._context.bot.get_chat_member(
+                    authorized_chat_id, self._update.effective_user.id
+                )
+                logging.info(
+                    f"@{member.user.username} is member of chat_id={authorized_chat_id}"
+                )
+                await self.notify_chat(authorized_chat_id, message, message_type)
+            except telegram.error.BadRequest as error:
+                self.message = f"Member not found in chat_id={authorized_chat_id}"
