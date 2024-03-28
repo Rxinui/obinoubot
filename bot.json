@@ -52,44 +52,57 @@
     }
   },
   "scheduler": {
-    "daily": [
-      {
-        "time": [12, 30, 0],
-        "days": [6],
-        "job": "MessageJob",
-        "args": {
-          "chat_id": "${chats.Road_to_valhalla}",
-          "message": "Dernier rappel pour remplir vos RIRs sur votre programmation, avant dimanche."
+    "daily": {
+      "onlysl-staging": [
+        {
+          "time": [10, 30, 0],
+          "days": [0, 1, 2, 3, 4, 5, 6],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.onlysl-staging}",
+            "message": "PROD::daily message"
+          }
         }
-      },
-      {
-        "time": [17, 15, 0],
-        "days": [2, 4],
-        "job": "MessageJob",
-        "args": {
-          "chat_id": "${chats.Road_to_valhalla}",
-          "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
+      ],
+      "Road_to_valhalla": [
+        {
+          "time": [12, 30, 0],
+          "days": [6],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Road_to_valhalla}",
+            "message": "Dernier rappel pour remplir vos RIRs sur votre programmation, avant dimanche."
+          }
+        },
+        {
+          "time": [17, 15, 0],
+          "days": [2, 4],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Road_to_valhalla}",
+            "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
+          }
+        },
+        {
+          "time": [18, 0, 0],
+          "days": [1],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Road_to_valhalla}",
+            "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/newpr` afin de mettre a jour le classement."
+          }
+        },
+        {
+          "time": [17, 45, 0],
+          "days": [4],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Road_to_valhalla}",
+            "message": "Saviez-vous que vous pouvez utiliser mon code `OBIN` pour obtenir **-10% de réduction sur l'ensemble du shop** https://tatakai.store - d'ailleurs l'édition StreetLifting club est disponible. :)"
+          }
         }
-      },
-      {
-        "time": [18, 0, 0],
-        "days": [1],
-        "job": "MessageJob",
-        "args": {
-          "chat_id": "${chats.Road_to_valhalla}",
-          "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/newpr` afin de mettre a jour le classement."
-        }
-      },
-      {
-        "time": [17, 45, 0],
-        "days": [4],
-        "job": "MessageJob",
-        "args": {
-          "chat_id": "${chats.Road_to_valhalla}",
-          "message": "Saviez-vous que vous pouvez utiliser mon code `OBIN` pour obtenir **-10% de réduction sur l'ensemble du shop** https://tatakai.store - d'ailleurs l'édition StreetLifting club est disponible. :)"
-        }
-      }
-    ],
-    "monthly": []
+      ]
+    },
+    "monthly": {}
   }
 }
