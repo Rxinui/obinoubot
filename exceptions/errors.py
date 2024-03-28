@@ -3,7 +3,16 @@ class UnauthorizedChatError(Exception):
 
     def __init__(self, chat_id: str | int) -> None:
         self.chat_id = chat_id
-        self.message = f"Chat id={chat_id} is not authorized by the bot."
+        self.message = f"chat_id={chat_id} is not authorized by the bot."
+        super().__init__(self.message)
+
+
+class UnauthorizedMemberError(Exception):
+    """Exception raised when a user is not a member of an authorized chat."""
+
+    def __init__(self, user_id) -> None:
+        self.user_id = user_id
+        self.message = f"user_id={user_id} is not recognized as an authorized member."
         super().__init__(self.message)
 
 

@@ -1,5 +1,6 @@
+import commands
+import conversations
 from commands.base import BaseCommand
-from commands import get_command_by_classname
 from jobs import get_job_by_name
 from utils.botconfig import BotConfig
 from datetime import time
@@ -20,12 +21,12 @@ class CommandManager:
             list[BaseCommand]: list of generated commands
         """
         return [
-            get_command_by_classname(cmd_info["instance_of"])(
+            commands.__dict__.get(cmd_info["instance_of"])(
                 botconfig, cmd_name, **cmd_info["args"]
             )
             for cmd_name, cmd_info in botconfig.commands.items()
         ] + [
-            get_command_by_classname(cmd_info["instance_of"])(
+            conversations.__dict__.get(cmd_info["instance_of"])(
                 botconfig, cmd_name, **cmd_info["args"]
             )
             for cmd_name, cmd_info in botconfig.conversations.items()
