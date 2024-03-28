@@ -1,27 +1,23 @@
 import logging
+from typing import Literal
 import telegram.error
 from telegram import ChatMember, Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from exceptions import UnauthorizedChatError
+from exceptions.errors import UnauthorizedMemberError
 from utils import botconfig
 from utils.parser import PropertyParser
 from . import BotConfig
 
 
-class BotMessage:
+class BotAuthorizationService:
 
-    def __init__(
-        self,
-        botconfig: BotConfig,
-        update: Update = None,
-        context: ContextTypes.DEFAULT_TYPE = None,
-    ):
+    def __init__(self, botconfig: BotConfig, context: ContextTypes.DEFAULT_TYPE):
         self._botconfig = botconfig
-        self._update = update
         self._context = context
 
-    def _is_coming_from_authorized_chats(self, chat_id: str | int) -> bool:
+    def is_coming_from_authorized_chats(self, chat_id: str | int) -> bool:
         """Verify that the request issued to the bot is coming from an authorized chat.
 
         Args:
@@ -30,14 +26,41 @@ class BotMessage:
         Returns:
             bool: True if the chat is authorized else False
         """
-        return str(chat_id) in self._botconfig.chats.values()
+        return str(object=chat_id) in self._botconfig.chats.values()
+
+    async def is_user_member_of_chat(
+        self, user_id: int, chat_id: str | int
+    ) -> Literal[True]:
+        try:
+            member: ChatMember = await self._context.bot.get_chat_member(
+                chat_id, user_id
+            )
+            logging.info(f"@{member.user.username} is member of chat_id={chat_id}")
+            return True
+        except telegram.error.BadRequest:
+            raise UnauthorizedMemberError(user_id)
+
+    async def is_user_member_of_authorized_chats(self, user_id: int) -> list[str]:
+        authorized_chats = []
+        for authorized_chat_id in self._botconfig.chats.values():
+            try:
+                await self.is_user_member_of_chat(user_id, authorized_chat_id)
+                authorized_chats.append(authorized_chat_id)
+            except UnauthorizedMemberError:
+                logging.warn(
+                    f"user_id={user_id} not a member of authorized chat_id={authorized_chat_id}"
+                )
+        return authorized_chats
 
 
-class BotReplyService(BotMessage):
+class BotMessageService:
     def __init__(
         self, botconfig: BotConfig, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        super().__init__(botconfig, update, context)
+        self._authorization_service = BotAuthorizationService(botconfig, context)
+        self._botconfig = botconfig
+        self._update = update
+        self._context = context
 
     async def send_reply(
         self, message: str, message_type: ParseMode = ParseMode.MARKDOWN_V2
@@ -53,16 +76,11 @@ class BotReplyService(BotMessage):
         Raises:
             UnauthorizedChatError: unauthorized chat id
         """
-        if not self._is_coming_from_authorized_chats(self._update.effective_chat.id):
+        if not self._authorization_service.is_coming_from_authorized_chats(
+            self._update.effective_chat.id
+        ):
             raise UnauthorizedChatError(self._update.effective_chat.id)
         await self._update.effective_message.reply_text(message, message_type)
-
-
-class BotNotifyService(BotMessage):
-    def __init__(
-        self, botconfig: BotConfig, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ):
-        super().__init__(botconfig, update, context)
 
     async def notify_chat(
         self,
@@ -88,26 +106,24 @@ class BotNotifyService(BotMessage):
             _chat_id = chat_id
         else:
             raise TypeError("***Expecting chat_id to be either 'str' or 'int' type")
-        if not self._is_coming_from_authorized_chats(_chat_id):
+        if not self._authorization_service.is_coming_from_authorized_chats(_chat_id):
             raise UnauthorizedChatError(_chat_id)
         logging.info(f"Notify chat id '{chat_id}': {message}")
         await self._context.bot.send_message(
             _chat_id, text=message, parse_mode=message_type
         )
 
-    async def notify_authorized_chat_where_user_is_member(
+    async def notify_authorized_chats_where_user_is_member(
         self,
         message,
         message_type: ParseMode = ParseMode.MARKDOWN,
     ):
-        for authorized_chat_id in self._botconfig.chats.values():
-            try:
-                member: ChatMember = await self._context.bot.get_chat_member(
-                    authorized_chat_id, self._update.effective_user.id
-                )
-                logging.info(
-                    f"@{member.user.username} is member of chat_id={authorized_chat_id}"
-                )
-                await self.notify_chat(authorized_chat_id, message, message_type)
-            except telegram.error.BadRequest as error:
-                self.message = f"Member not found in chat_id={authorized_chat_id}"
+        member_chats = (
+            await self._authorization_service.is_user_member_of_authorized_chats(
+                self._update.effective_user.id
+            )
+        )
+        for chat_id in member_chats:
+            await self._context.bot.send_message(
+                chat_id, text=message, parse_mode=message_type
+            )

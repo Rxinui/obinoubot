@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
 from exceptions.errors import CommandNotAllowedError
-from services import BotReplyService
+from services import BotMessageService
 from utils.parser import PropertyParser
 from utils.botconfig import BotConfig
 
@@ -78,6 +78,6 @@ class BaseMessageCommand(BaseCommand):
     ):
         await super().execute(update, context)
         message = self._parser.parse(self._message)
-        service = BotReplyService(self._botconfig, update, context)
+        service = BotMessageService(self._botconfig, update, context)
         logging.info(f"{self.name} is sending message: {message}")
         await service.send_reply(message, self._message_type)
