@@ -1,36 +1,54 @@
 {
   "chats": {
-    "Test_Valhalla": "-1001959905789",
+    "onlysl-staging": "-1001658023494",
     "Road_to_valhalla": "-4039679338"
   },
   "properties": {
-    "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
-    "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
-    "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+    "onlysl-staging": {
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040",
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1444631421",
+      "GFORM_PR_POST_ENTRY_MU": "entry.582945330",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
+    },
+    "Road_to_valhalla": {
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314",
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.742237483",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1509725706",
+      "GFORM_PR_POST_ENTRY_MU": "entry.2038241630",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.1321964420",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.620889826",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.1205398535"
+    }
   },
-  "commands": {
+  "conversations": {
     "newpr": {
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
-      "args": {
-        "notify_chats": ["${chats.Road_to_valhalla}"]
-      },
+      "args": {},
       "deprecated": false
-    },
-    "classement": {
-      "instance_of": "BaseMessageCommand",
-      "args": {
-        "message": "*Voir le [classement de l'équipage](${properties.GSHEET_RANKING})*",
-        "message_type": "MARKDOWN_V2"
-      },
-      "description": "Feuille du classement des coachés",
-      "deprecated": false
+    }
+  },
+  "commands": {
+    "ranking": {
+      "instance_of": "RankingCommand",
+      "args": {},
+      "description": "See athletes ranking",
+      "deprecated": false,
+      "allowed_for": ["${chats.Road_to_valhalla}", "${chats.onlysl-staging}"]
     },
     "help": {
       "instance_of": "HelpCommand",
       "args": {},
-      "description": "Affiche les commandes du bot",
-      "deprecated": false
+      "description": "Display Bot's commands",
+      "deprecated": false,
+      "allowed_for": ["${chats.Road_to_valhalla}", "${chats.onlysl-staging}"]
     }
   },
   "scheduler": {

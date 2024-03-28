@@ -1,7 +1,7 @@
 import commands
 import conversations
+import jobs
 from commands.base import BaseCommand
-from jobs import get_job_by_name
 from utils.botconfig import BotConfig
 from datetime import time
 from telegram.ext import JobQueue, Application
@@ -76,8 +76,9 @@ class JobManager:
             job_queue (JobQueue): queue
             job (BaseJob): job to execute
         """
-        for job_config in botconfig.scheduler["daily"]:
-            job_class = get_job_by_name(job_config["job"])
+        daily_jobs = sum(botconfig.scheduler.daily.values(), [])
+        for job_config in daily_jobs:
+            job_class = jobs.__dict__.get(job_config["job"])
             job = job_class(botconfig, **job_config["args"])
             t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
             job_queue.run_daily(job, time=t, days=job_config["days"])
@@ -90,8 +91,9 @@ class JobManager:
             job_queue (JobQueue): queue
             job (BaseJob): job to execute
         """
-        for job_config in botconfig.scheduler["monthly"]:
-            job_class = get_job_by_name(job_config["job"])
+        monthly_jobs = sum(botconfig.scheduler.monthly.values(), [])
+        for job_config in monthly_jobs:
+            job_class = jobs.__dict__.get(job_config["job"])
             job = job_class(botconfig, **job_config["args"])
             t = time(*job_config["time"], tzinfo=JobManager.DEFAULT_TIMEZONE)
             job_queue.run_monthly(job, when=t, day=job_config["day"])

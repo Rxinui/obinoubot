@@ -8,16 +8,21 @@ from .base import BaseJob
 
 import uuid
 
+
 class MessageJob(BaseJob):
 
     def __init__(
         self, botconfig: BotConfig, chat_id: str, message: str, name: str = None
     ) -> None:
-        job_name = f"{self.__class__.__name__}-{str(uuid.uuid1())[:8]}" if not name else name
-        super().__init__(botconfig, job_name)
         self.__parser = PropertyParser(botconfig)
         self.__chat_id = self.__parser.parse(chat_id)
         self.__message = self.__parser.parse(message)
+        job_name = (
+            f"{self.__class__.__name__}.{self.__chat_id}.{str(uuid.uuid1())[:8]}"
+            if not name
+            else name
+        )
+        super().__init__(botconfig, job_name)
 
     async def __call__(self, context: ContextTypes.DEFAULT_TYPE):
         super().__call__(context)
