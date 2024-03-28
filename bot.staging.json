@@ -67,7 +67,7 @@
           "job": "MessageJob",
           "args": {
             "chat_id": "${chats.onlysl-dev}",
-            "message": "Daily message!"
+            "message": "STAGING::Daily message!"
           }
         }
       ],
@@ -78,7 +78,7 @@
           "job": "MessageJob",
           "args": {
             "chat_id": "${chats.onlysl-staging}",
-            "message": "Daily message!"
+            "message": "STAGING::Daily message!"
           }
         }
       ]
