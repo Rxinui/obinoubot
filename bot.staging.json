@@ -5,22 +5,33 @@
   },
   "properties": {
     "onlysl-dev": {
-      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
-      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
-      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/11p68dge3OG7f3OdaO5Z_x9DOSQpo_6Gw2bdgTEpDucc/edit#gid=1531583040",
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSchkl8cPxefB4OYwEsGgIYCM7CBpzdBV4vRZvBlTFt8PkTBKg/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSchkl8cPxefB4OYwEsGgIYCM7CBpzdBV4vRZvBlTFt8PkTBKg/formResponse",
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1444631421",
+      "GFORM_PR_POST_ENTRY_MU": "entry.582945330",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
     },
     "onlysl-staging": {
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040",
       "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
       "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
-      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040"
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1444631421",
+      "GFORM_PR_POST_ENTRY_MU": "entry.582945330",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
     }
   },
   "conversations": {
     "newpr": {
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
-      "args": {
-      },
+      "args": {},
       "deprecated": false
     }
   },

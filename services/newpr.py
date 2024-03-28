@@ -1,47 +1,73 @@
+from typing import Self
 import requests
 import logging
+
+from utils.botconfig import BotConfig
 
 
 class NewPrService:
     """Submit new PR to Google Form"""
 
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    HEADERS = {"Content-Type": "application/x-www-form-urlencoded"}
 
-    CATEGORIES = ["-66", "-73", "-80", "-87", "-94", "-104", ">104"]
+    MALE_CATEGORIES = ["-66", "-73", "-80", "-87", "-94", "-104", ">104"]
+    FEMALE_CATEGORIES = ["-52", "-57", "-63", "-70", ">70"]
 
-    def __init__(self, url: str) -> None:
-        self.url = url
-
-    @staticmethod
-    def __build_form_data(
-        user_id: str,
-        category: str,
-        mu: str = None,
-        pull: str = None,
-        dips: str = None,
-        squat: str = None,
-    ) -> str:
-        entries = {
-            "entry.742237483": f"{user_id}",
-            "entry.1509725706": f"{category}",
-            "entry.2038241630": mu,
-            "entry.1321964420": pull,
-            "entry.620889826": dips,
-            "entry.1205398535": squat,
-        }
-        return entries
-
-    def submit_new_pr(
+    def __init__(
         self,
-        user_id: str,
+        url: str,
+        entry_username: str,
+        entry_category: str,
+        entry_mu: str,
+        entry_pull: str,
+        entry_dips: str,
+        entry_squat: str,
+    ) -> None:
+        self.__url = url
+        self.__entry_username = entry_username
+        self.__entry_category = entry_category
+        self.__entry_mu = entry_mu
+        self.__entry_pull = entry_pull
+        self.__entry_dips = entry_dips
+        self.__entry_squat = entry_squat
+        self.__data = {}
+
+    def new_pr(
+        self,
+        username: str,
         category: str,
         mu: float = None,
         pull: float = None,
         dips: float = None,
         squat: float = None,
+    ) -> Self:
+        self.__data = {
+            self.__entry_username: username,
+            self.__entry_category: category,
+            self.__entry_mu: mu,
+            self.__entry_pull: pull,
+            self.__entry_dips: dips,
+            self.__entry_squat: squat,
+        }
+        return self
+
+    def submit(
+        self,
     ) -> requests.Response:
-        data = NewPrService.__build_form_data(user_id, category, mu, pull, dips, squat)
-        logging.debug(data)
-        r = requests.post(self.url, headers=self.headers, data=data)
-        logging.info(r.status_code)
-        return r
+        logging.info("Data to be submitted: " + self.__url)
+        logging.info(self.__data)
+        response = requests.post(self.__url, headers=self.HEADERS, data=self.__data)
+        logging.info(response.status_code)
+        return response
+
+    @classmethod
+    def categories(cls) -> list[str]:
+        return cls.MALE_CATEGORIES + cls.FEMALE_CATEGORIES
+
+    @classmethod
+    def guess_gender_from_category(cls, category: str) -> str | None:
+        if category in cls.MALE_CATEGORIES:
+            return "MALE"
+        if category in cls.FEMALE_CATEGORIES:
+            return "FEMALE"
+        return None
