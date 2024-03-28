@@ -1,16 +1,14 @@
-from importlib.metadata import entry_points
+import logging
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ConversationHandler, ContextTypes, CommandHandler, MessageHandler, filters
 from telegram.constants import ParseMode
-import logging
 
-from commands.base import BaseCommand
+from commands.conversations.base import BaseConversation
 from services.message import BotNotifyService
 from services.newpr import NewPrService
 from utils.botconfig import BotConfig
-from utils.parser import PropertyParser
 
-class NewPrConversation(BaseCommand):
+class NewPrConversation(BaseConversation):
 
   ENTER_CATEGORY, ENTER_PR, REGISTER_PR, SUBMIT, NOTIFY_CHATS = range(5)
 
@@ -19,25 +17,29 @@ class NewPrConversation(BaseCommand):
   DIPS = "Dips"
   SQUAT = "Squat"
 
+  CATEGORIES = NewPrService.CATEGORIES
 
   def __init__(self, botconfig: BotConfig, name: str, notify_chats: list[str|int] = [], *args, **kwargs):
-    super().__init__(botconfig, name)
-    self._parser = PropertyParser(botconfig)
-    self._new_pr_service = NewPrService(self._botconfig["properties"]["GOOGLE_FORM_PR_POST"])
+    super().__init__(
+      botconfig, 
+      name, 
+      entry_points=[CommandHandler(name,self.start)], 
+      states={
+        self.ENTER_CATEGORY: [MessageHandler(filters.Regex(f'^({"|".join(self.CATEGORIES)})$'),self.enter_category)],
+        self.ENTER_PR: [MessageHandler(filters.Regex(f"^(MU|Pull|Dips|Squat)$"),self.enter_pr),MessageHandler(filters.Regex("^(Submit)$"),self.submit)],
+        self.REGISTER_PR: [MessageHandler(filters.Regex("^[0-9\.]+$"),self.register_pr)],
+      }, 
+      fallbacks=[CommandHandler("cancel",self.cancel),MessageHandler(filters.Regex("^(Cancel)$"),self.cancel)]
+    )
+    self._new_pr_service = NewPrService("https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse")
     self.reply_lift_keyboard = ReplyKeyboardMarkup([[self.MU,self.PULL,self.DIPS,self.SQUAT],["Cancel","Submit"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
-    self.reply_category_keyboard = ReplyKeyboardMarkup([self._new_pr_service.CATEGORIES[:4],self._new_pr_service.CATEGORIES[4:],["Cancel"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
+    self.reply_category_keyboard = ReplyKeyboardMarkup([self.CATEGORIES[:4],self.CATEGORIES[4:],["Cancel"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
+    
     self._notify_chats = notify_chats
 
   @property
   def handler(self) -> ConversationHandler:
-    entry_points = [CommandHandler(self._name,self.start)]
-    states = {
-      self.ENTER_CATEGORY: [MessageHandler(filters.Regex(f'^({"|".join(self._new_pr_service.CATEGORIES)})$'),self.enter_category)],
-      self.ENTER_PR: [MessageHandler(filters.Regex(f"^(MU|Pull|Dips|Squat)$"),self.enter_pr),MessageHandler(filters.Regex("^(Submit)$"),self.submit)],
-      self.REGISTER_PR: [MessageHandler(filters.Regex("^[0-9\.]+$"),self.register_pr)],
-    }
-    fallbacks = [CommandHandler("cancel",self.cancel),MessageHandler(filters.Regex("^(Cancel)$"),self.cancel)]
-    return ConversationHandler(entry_points, states, fallbacks)
+    return super().handler
 
   @staticmethod
   def __stringify_prs(prs: dict[str]) -> str:
@@ -99,7 +101,7 @@ class NewPrConversation(BaseCommand):
     response = self._new_pr_service.submit_new_pr(user_id=update.effective_user.username,category=context.user_data["category"],mu=context.user_data.get(self.MU),pull=context.user_data.get(self.PULL),dips=context.user_data.get(self.DIPS),squat=context.user_data.get(self.SQUAT))
     if response.status_code == 200:
       text_to_send = f"I see you've gotten stronger @{update.effective_user.username}.\n" \
-        "Your PRs have been submitted and your rank is updated ${properties.GOOGLE_SHEET_CLASSEMENT}"
+        "Your PRs have been submitted and your rank is updated https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse"
       logging.info(text_to_send)
     if response.status_code == 400:
       text_to_send = f"*Erreur: contacter l'admin.*"
@@ -112,11 +114,11 @@ class NewPrConversation(BaseCommand):
     return ConversationHandler.END
 
   async def notify_group(self,update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # TODO fetch group chat id from user id
     service = BotNotifyService(self._botconfig,update,context)
     prs = '\n'.join([ f'{lift.capitalize()}: {pr}' for lift, pr in context.user_data.items() if pr])
     message = f"Be aware that @{update.effective_user.username} has new PRs folks !\n{prs}"
-    for chat_id in self._notify_chats:
-      await service.notify_chat(chat_id, message)
+    await service.notify_authorized_chat_where_user_is_member(message)
     return context.user_data.clear()
   
   async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -126,7 +128,3 @@ class NewPrConversation(BaseCommand):
     )
     context.user_data.clear()
     return ConversationHandler.END
-
-
-  
-

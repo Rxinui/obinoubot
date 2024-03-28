@@ -5,14 +5,14 @@
   },
   "properties": {
     "onlysl-dev": {
-      "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
-      "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
-      "GOOGLE_SHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314"
     },
     "onlysl-staging": {
-      "GOOGLE_FORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
-      "GOOGLE_FORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
-      "GOOGLE_SHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040"
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040"
     }
   },
   "conversations": {
@@ -20,7 +20,6 @@
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
       "args": {
-        "notify_chats": ["${chats.onlysl-dev}"]
       },
       "deprecated": false
     }
@@ -39,6 +38,13 @@
       "description": "Display Bot's commands",
       "deprecated": false,
       "allowed_for": ["${chats.onlysl-dev}"]
+    },
+    "ping": {
+      "instance_of": "PingCommand",
+      "args": {},
+      "description": "Pong",
+      "deprecated": false,
+      "allowed_for": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
     }
   },
   "scheduler": {

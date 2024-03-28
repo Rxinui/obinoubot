@@ -24,6 +24,11 @@ class CommandManager:
                 botconfig, cmd_name, **cmd_info["args"]
             )
             for cmd_name, cmd_info in botconfig.commands.items()
+        ] + [
+            get_command_by_classname(cmd_info["instance_of"])(
+                botconfig, cmd_name, **cmd_info["args"]
+            )
+            for cmd_name, cmd_info in botconfig.conversations.items()
         ]
 
     @staticmethod
