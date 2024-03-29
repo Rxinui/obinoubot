@@ -1,7 +1,8 @@
 {
   "chats": {
     "onlysl-staging": "-1001658023494",
-    "Road_to_valhalla": "-4039679338"
+    "Road_to_valhalla": "-4039679338",
+    "Everydaytraining": "-4124273497"
   },
   "properties": {
     "onlysl-staging": {
@@ -25,6 +26,17 @@
       "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
       "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
       "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
+    },
+    "Everydaytraining": {
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLzEOvmbogjNb85rUSUvujwzhUhU1v8_3to_C_uBljo8cXj_NTPuMX4ySMgvAUin9bHFAb2pIEgQ7c/pubhtml",
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSc-bPWb-r1a3edk6wvWrwGbePPUkrN8-vapyoC8fAyOM6B2Wg/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSc-bPWb-r1a3edk6wvWrwGbePPUkrN8-vapyoC8fAyOM6B2Wg/formResponse",
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1444631421",
+      "GFORM_PR_POST_ENTRY_MU": "entry.582945330",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
     }
   },
   "conversations": {
@@ -41,14 +53,22 @@
       "args": {},
       "description": "See athletes ranking",
       "deprecated": false,
-      "allowed_for": ["${chats.Road_to_valhalla}", "${chats.onlysl-staging}"]
+      "allowed_for": [
+        "${chats.Road_to_valhalla}",
+        "${chats.onlysl-staging}",
+        "${chats.Everydaytraining}"
+      ]
     },
     "help": {
       "instance_of": "HelpCommand",
       "args": {},
       "description": "Display Bot's commands",
       "deprecated": false,
-      "allowed_for": ["${chats.Road_to_valhalla}", "${chats.onlysl-staging}"]
+      "allowed_for": [
+        "${chats.Road_to_valhalla}",
+        "${chats.onlysl-staging}",
+        "${chats.Everydaytraining}"
+      ]
     }
   },
   "scheduler": {
@@ -80,7 +100,7 @@
           "job": "MessageJob",
           "args": {
             "chat_id": "${chats.Road_to_valhalla}",
-            "message": "N'oubliez pas de remplir vos RIRs sur votre programmation, avant dimanche."
+            "message": "Remplissez vos RIRs sur votre programmation, avant dimanche."
           }
         },
         {
@@ -89,7 +109,7 @@
           "job": "MessageJob",
           "args": {
             "chat_id": "${chats.Road_to_valhalla}",
-            "message": "Vous avez PR cette semaine ? Reporter le via notre formulaire en utilisant la commande `/newpr` afin de mettre a jour le classement."
+            "message": "Vous avez PR cette semaine ? Utilisez `/newpr` afin de mettre a jour le classement."
           }
         },
         {
@@ -99,6 +119,26 @@
           "args": {
             "chat_id": "${chats.Road_to_valhalla}",
             "message": "Saviez-vous que vous pouvez utiliser mon code `OBIN` pour obtenir **-10% de réduction sur l'ensemble du shop** https://tatakai.store - d'ailleurs l'édition StreetLifting club est disponible. :)"
+          }
+        }
+      ],
+      "Everydaytraining": [
+        {
+          "time": [16, 30, 0],
+          "days": [5, 6],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Everydaytraining}",
+            "message": "Remplissez vos RIRs sur votre programmation, avant dimanche."
+          }
+        },
+        {
+          "time": [18, 0, 0],
+          "days": [1],
+          "job": "MessageJob",
+          "args": {
+            "chat_id": "${chats.Everydaytraining}",
+            "message": "Vous avez PR cette semaine ? Utilisez `/newpr` afin de mettre a jour le classement."
           }
         }
       ]
