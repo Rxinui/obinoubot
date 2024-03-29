@@ -146,7 +146,7 @@ class NewPrConversation(BaseConversation):
     service = BotMessageService(self._botconfig,update,context)
     prs = '\n'.join([ f'{lift.capitalize()}: {pr}' for lift, pr in context.user_data.items() if pr])
     message = f"Be aware that @{update.effective_user.username} has new PRs folks !\n{prs}"
-    await service.notify_authorized_chats_where_user_is_member(message)
+    await service.notify_authorized_chats_where_user_is_member(update.effective_user.id, message)
     return context.user_data.clear()
   
   async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
