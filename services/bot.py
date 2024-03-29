@@ -115,12 +115,13 @@ class BotMessageService:
 
     async def notify_authorized_chats_where_user_is_member(
         self,
+        user_id,
         message,
         message_type: ParseMode = ParseMode.MARKDOWN,
     ):
         member_chats = (
             await self._authorization_service.is_user_member_of_authorized_chats(
-                self._update.effective_user.id
+                user_id
             )
         )
         for chat_id in member_chats:
