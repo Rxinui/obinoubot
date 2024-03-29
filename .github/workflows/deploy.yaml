@@ -12,11 +12,37 @@ on:
         required: true
         options:
           - prod
+  # push:
+  #   branches: develop
 jobs:
+  pre-deploy:
+    runs-on: ubuntu-latest
+    outputs:
+      ref-to-deploy: ${{ steps.set-vars.outputs.ref-to-deploy }}
+      deploy-to: ${{ steps.set-vars.outputs.deploy-to }}
+      deploy-method: ${{ steps.set-vars.outputs.deploy-method }}
+    steps:
+      - name: Set deploy variables
+        id: set-vars
+        run: |
+          case "${{ github.event_name }}" in
+            "push")
+              echo "ref-to-deploy=${{ github.ref }}" >> $GITHUB_OUTPUT
+              echo "deploy-to=staging" >> $GITHUB_OUTPUT
+              echo "deploy-method=git" >> $GITHUB_OUTPUT
+              ;;
+            "workflow_dispatch")
+              echo "ref-to-deploy=${{ inputs.ref }}" >> $GITHUB_OUTPUT
+              echo "deploy-to=${{ inputs.deploy-to }}" >> $GITHUB_OUTPUT
+              echo "deploy-method=git" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
   deploy:
+    needs: [pre-deploy]
     uses: ./.github/workflows/reusable-deploy.yaml
     secrets: inherit
     with:
-      ref: "${{ inputs.ref }}"
-      deploy-to: "${{ inputs.deploy-to }}"
-      deploy-method: git
+      ref: "${{ needs.pre-deploy.outputs.ref-to-deploy }}"
+      deploy-to: "${{ needs.pre-deploy.outputs.deploy-to }}"
+      deploy-method: "${{ needs.pre-deploy.outputs.deploy-method}}"

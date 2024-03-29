@@ -15,7 +15,7 @@ DEFAULT_TIMEZONE = pytz.timezone("Europe/Paris")
 
 def load_token():
     logging.info(f"APP_MODE is set on '{os.environ.get("APP_ENV")}'")
-    if os.environ.get("APP_ENV") == "prod":
+    if os.environ.get("APP_ENV") in ["prod","staging"]:
         return os.environ["TOKEN_BOT"]
     with open("token.staging", "r") as token_fp:
         return token_fp.read()
@@ -23,6 +23,8 @@ def load_token():
 def load_botconfig() -> BotConfig:
     if os.environ.get("APP_ENV") == "prod":
         return BotConfig("bot.json")
+    if os.environ.get("APP_ENV") == "staging":
+        return BotConfig("bot.staging.json")
     return BotConfig("bot.staging.json")
 
 def run():
