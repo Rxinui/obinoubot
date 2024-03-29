@@ -16,7 +16,7 @@ class RankingCommand(BaseMessageCommand):
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
         chat_key = self._botconfig.inverted_chats[str(update.message.chat_id)]
-        link = self._botconfig.properties[chat_key].GFORM_PR_VIEW
+        link = self._botconfig.properties[chat_key].GSHEET_RANKING
         self.message = f"[Check out {update.effective_chat.title}'s ranking]({link})"
         # get property according to chat id
         await super().execute(update, context)

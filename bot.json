@@ -5,7 +5,7 @@
   },
   "properties": {
     "onlysl-staging": {
-      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1QU8yPJ7n5AJACMbk31UCxam8_sfIhd4S2FLFdOYbr2Q/edit#gid=1531583040",
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1RBC6kXVMPQ7JLhcwvCE0bu1zWc_kj3is9Gh8W3ofj7c/edit#gid=1531583040",
       "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/viewform?usp=sf_link",
       "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1CongZQ-SqU90jzb6mMOckl_bMZ4b-rF3a76_R44AZLZ-wg/formResponse",
       "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
@@ -16,15 +16,15 @@
       "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
     },
     "Road_to_valhalla": {
-      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/1ZgHSYOkEw6VC27ZsQ930pB9pOBSwI_bvuVDaAnu7DE4/edit#gid=947482314",
-      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/viewform?usp=sf_link",
-      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeEomm3cNsaDCmhAfWVHP8dqGP1jGwo_MFcnEsEj2tRyLHcyQ/formResponse",
-      "GFORM_PR_POST_ENTRY_USERNAME": "entry.742237483",
-      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1509725706",
-      "GFORM_PR_POST_ENTRY_MU": "entry.2038241630",
-      "GFORM_PR_POST_ENTRY_PULL": "entry.1321964420",
-      "GFORM_PR_POST_ENTRY_DIPS": "entry.620889826",
-      "GFORM_PR_POST_ENTRY_SQUAT": "entry.1205398535"
+      "GSHEET_RANKING": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQztkw3caISo7--M7e0BP3dOrjtx-Yqh5a7jgtXGGill95mwO45YXyhZG71F7XAl7I8W874AVxHUiqm/pubhtml",
+      "GFORM_PR_VIEW": "https://docs.google.com/forms/d/e/1FAIpQLSd9mRqaLXeuH9tqy-_HbzFjcVKvkKMMMpmOjBW6Ke6KJ1GPzg/viewform?usp=sf_link",
+      "GFORM_PR_POST": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSd9mRqaLXeuH9tqy-_HbzFjcVKvkKMMMpmOjBW6Ke6KJ1GPzg/formResponse",
+      "GFORM_PR_POST_ENTRY_USERNAME": "entry.1851416531",
+      "GFORM_PR_POST_ENTRY_CATEGORY": "entry.1444631421",
+      "GFORM_PR_POST_ENTRY_MU": "entry.582945330",
+      "GFORM_PR_POST_ENTRY_PULL": "entry.836833815",
+      "GFORM_PR_POST_ENTRY_DIPS": "entry.84725958",
+      "GFORM_PR_POST_ENTRY_SQUAT": "entry.187099849"
     }
   },
   "conversations": {
