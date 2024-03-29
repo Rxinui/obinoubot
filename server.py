@@ -7,6 +7,8 @@ from telegram.ext import ApplicationBuilder, ContextTypes, ExtBot
 from dotenv import load_dotenv
 from utils import JobManager, BotConfig, CommandManager
 
+load_dotenv()
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -28,7 +30,6 @@ def load_botconfig() -> BotConfig:
     return BotConfig("bot.staging.json")
 
 def run():
-    load_dotenv()
     BOT_CONFIG = load_botconfig()
     application = ApplicationBuilder().token(load_token()).build()
     bot : ExtBot = application.bot

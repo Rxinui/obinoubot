@@ -131,7 +131,7 @@ class NewPrConversation(BaseConversation):
     if error_links:
       text_to_send += f"{error_text}\n{error_links}"
     await update.message.reply_text(
-      self._parser.parse(text_to_send),reply_markup=ReplyKeyboardRemove(),parse_mode=ParseMode.MARKDOWN
+      self._parser.parse(text_to_send),reply_markup=ReplyKeyboardRemove(),parse_mode=ParseMode.HTML
     )
     self.teardown_user_data(update,context)
     await self.notify_group(update, context)
