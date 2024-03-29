@@ -35,10 +35,18 @@ class BotAuthorizationService:
             member: ChatMember = await self._context.bot.get_chat_member(
                 chat_id, user_id
             )
-            logging.info(f"@{member.user.username} is member of chat_id={chat_id}")
+            logging.info(f"@{member} in chat_id={chat_id}")
+            if member.status == ChatMember.LEFT:
+                logging.warn(
+                    f"user_id={member.user.id} is not part of chat_id={chat_id}"
+                )
+                raise UnauthorizedMemberError(chat_id, user_id)
             return True
         except telegram.error.BadRequest:
-            raise UnauthorizedMemberError(user_id)
+            logging.error(
+                f"Bad request occured for user_id={user_id} and chat_id={chat_id}"
+            )
+            raise UnauthorizedMemberError(chat_id, user_id)
 
     async def is_user_member_of_authorized_chats(self, user_id: int) -> list[str]:
         authorized_chats = []
@@ -46,10 +54,8 @@ class BotAuthorizationService:
             try:
                 await self.is_user_member_of_chat(user_id, authorized_chat_id)
                 authorized_chats.append(authorized_chat_id)
-            except UnauthorizedMemberError:
-                logging.warn(
-                    f"user_id={user_id} not a member of authorized chat_id={authorized_chat_id}"
-                )
+            except UnauthorizedMemberError as err:
+                logging.warn(err.message)
         return authorized_chats
 
 

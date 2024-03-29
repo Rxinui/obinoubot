@@ -10,9 +10,10 @@ class UnauthorizedChatError(Exception):
 class UnauthorizedMemberError(Exception):
     """Exception raised when a user is not a member of an authorized chat."""
 
-    def __init__(self, user_id) -> None:
+    def __init__(self, chat_id, user_id) -> None:
+        self.chat_id = chat_id
         self.user_id = user_id
-        self.message = f"user_id={user_id} is not recognized as an authorized member."
+        self.message = f"user_id={user_id} is not recognized as an authorized member of chat_id={chat_id}."
         super().__init__(self.message)
 
 
