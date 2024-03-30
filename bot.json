@@ -53,7 +53,7 @@
       "args": {},
       "description": "See athletes ranking",
       "deprecated": false,
-      "allowed_for": [
+      "chats_whitelist": [
         "${chats.Road_to_valhalla}",
         "${chats.onlysl-staging}",
         "${chats.Everydaytraining}"
@@ -64,7 +64,7 @@
       "args": {},
       "description": "Display Bot's commands",
       "deprecated": false,
-      "allowed_for": [
+      "chats_whitelist": [
         "${chats.Road_to_valhalla}",
         "${chats.onlysl-staging}",
         "${chats.Everydaytraining}"

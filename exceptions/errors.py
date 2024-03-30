@@ -1,7 +1,7 @@
 class UnauthorizedChatError(Exception):
     """Exception raised when a message is send to an unauthorized chat."""
 
-    def __init__(self, chat_id: str | int) -> None:
+    def __init__(self, chat_id: int) -> None:
         self.chat_id = chat_id
         self.message = f"chat_id={chat_id} is not authorized by the bot."
         super().__init__(self.message)
@@ -10,7 +10,7 @@ class UnauthorizedChatError(Exception):
 class UnauthorizedMemberError(Exception):
     """Exception raised when a user is not a member of an authorized chat."""
 
-    def __init__(self, chat_id, user_id) -> None:
+    def __init__(self, chat_id: int, user_id: int) -> None:
         self.chat_id = chat_id
         self.user_id = user_id
         self.message = f"user_id={user_id} is not recognized as an authorized member of chat_id={chat_id}."
@@ -18,9 +18,9 @@ class UnauthorizedMemberError(Exception):
 
 
 class CommandNotAllowedError(Exception):
-    """Exception raised when a command is triggered from an authorized chat that is not in the whitelist 'allowed_for'."""
+    """Exception raised when a command is triggered from an authorized chat that is not in the whitelist 'chats_whitelist'."""
 
-    def __init__(self, command: str, chat_id: str | int) -> None:
+    def __init__(self, command: str, chat_id: int) -> None:
         self.chat_id = chat_id
         self.command = command
         self.message = f"command={command} is not allowed in chat_id={chat_id}"

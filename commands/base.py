@@ -1,10 +1,11 @@
 import logging
-from typing import Dict, Self
+from typing import Dict
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
 from exceptions.errors import CommandNotAllowedError
 from services import BotMessageService
+from services.bot import BotAuthorizationService
 from utils.parser import PropertyParser
 from utils.botconfig import BotConfig
 
@@ -28,23 +29,18 @@ class BaseCommand:
     def handler(self) -> CommandHandler:
         return CommandHandler(self._name, self.execute)
 
-    def _is_allowed_for_this_chat(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-    ) -> Self:
-        allowed_for = [
-            int(self._parser.parse(chat))
-            for chat in self._botconfig.commands.get(self.name).allowed_for
-        ]
-        logging.info(f"{update.message.chat_id}, {allowed_for}")
-        if update.message.chat_id not in allowed_for:
-            raise CommandNotAllowedError(self.name, update.message.chat_id)
-        return self
-
     async def execute(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
     ):
         logging.info(f"{self.command_name} has been triggered")
-        self._is_allowed_for_this_chat(update, context)
+        auth_service = BotAuthorizationService(self._botconfig, context)
+        if not auth_service.is_chat_in_command_whitelist(
+            update.effective_chat.id, self.name
+        ):
+            raise CommandNotAllowedError(self.name, update.effective_chat.id)
+        logging.info(
+            f"{self.command_name} is authorized in chat_id={update.effective_chat.id}"
+        )
 
 
 class BaseMessageCommand(BaseCommand):

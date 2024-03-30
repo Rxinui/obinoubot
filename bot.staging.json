@@ -1,7 +1,13 @@
 {
+  "groups": {
+    "owner": [623710231],
+    "admins": [],
+    "developers": [],
+    "testers": []
+  },
   "chats": {
-    "onlysl-dev": "-1001959905789",
-    "onlysl-staging": "-1001658023494"
+    "onlysl-dev": -1001959905789,
+    "onlysl-staging": -1001658023494
   },
   "properties": {
     "onlysl-dev": {
@@ -32,7 +38,15 @@
       "instance_of": "NewPrConversation",
       "description": "Submit a new PR",
       "args": {},
-      "deprecated": false
+      "deprecated": false,
+      "restricted_to_groups": []
+    },
+    "textbot": {
+      "instance_of": "TextbotConversation",
+      "description": "Text message as the bot",
+      "args": {},
+      "deprecated": false,
+      "restricted_to_groups": ["owner"]
     }
   },
   "commands": {
@@ -41,21 +55,21 @@
       "args": {},
       "description": "See athletes ranking",
       "deprecated": false,
-      "allowed_for": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
+      "chats_whitelist": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
     },
     "help": {
       "instance_of": "HelpCommand",
       "args": {},
       "description": "Display Bot's commands",
       "deprecated": false,
-      "allowed_for": ["${chats.onlysl-dev}"]
+      "chats_whitelist": ["${chats.onlysl-dev}"]
     },
     "ping": {
       "instance_of": "PingCommand",
       "args": {},
       "description": "Pong",
       "deprecated": false,
-      "allowed_for": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
+      "chats_whitelist": ["${chats.onlysl-dev}", "${chats.onlysl-staging}"]
     }
   },
   "scheduler": {

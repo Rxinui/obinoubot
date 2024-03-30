@@ -19,7 +19,7 @@ class NewPrConversation(BaseConversation):
 
   CATEGORIES = NewPrService.categories()
 
-  def __init__(self, botconfig: BotConfig, name: str, notify_chats: list[str|int] = [], *args, **kwargs):
+  def __init__(self, botconfig: BotConfig, name: str, *args, **kwargs):
     super().__init__(
       botconfig, 
       name, 
@@ -33,8 +33,6 @@ class NewPrConversation(BaseConversation):
     )
     self.reply_lift_keyboard = ReplyKeyboardMarkup([[self.MU,self.PULL,self.DIPS,self.SQUAT],["Cancel","Submit"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
     self.reply_category_keyboard = ReplyKeyboardMarkup([self.CATEGORIES[:4],self.CATEGORIES[4:7],self.CATEGORIES[7:],["Cancel"]], one_time_keyboard=True, input_field_placeholder="Enter your new PRs using below keyboard")
-    
-    self._notify_chats = notify_chats
 
   @property
   def handler(self) -> ConversationHandler:

@@ -35,7 +35,7 @@ class PropertyParser:
         for key in property_tokens:
             bot_property = bot_property[key]
         logging.debug(f"Properties obtained: {bot_property}")
-        return bot_property
+        return str(bot_property)
 
     def parse(self, message: str) -> str:
         """Parse all properties variable into their value
@@ -47,5 +47,5 @@ class PropertyParser:
             str: parsed message
         """
         return re.sub(
-            self.PROPERTY_PATTERN, self.retrieve_property_from_variable, message
+            self.PROPERTY_PATTERN, self.retrieve_property_from_variable, str(message)
         )
